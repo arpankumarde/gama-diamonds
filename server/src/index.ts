@@ -1,15 +1,8 @@
-import express from "express";
-import { config } from "dotenv";
+import app from "./app.js";
+import connectToDatabase from "./db/db.js";
 
-const app = express();
-config({ quiet: true });
-const port = process.env.PORT || 5000;
-
-app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.json({ message: "Server healthy!" });
-});
+connectToDatabase();
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
   console.log(`Server is running at Port ${port}`);

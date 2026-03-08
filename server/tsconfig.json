@@ -6,15 +6,15 @@
     "outDir": "./dist",
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "esnext",
-    "target": "esnext",
+    "module": "NodeNext",
+    "target": "ES2022",
     "lib": [
-      "esnext"
+      "ES2022"
     ],
     "types": [
       "node"
     ],
-    "moduleResolution": "bundler",
+    "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     // Other Outputs
     // "sourceMap": true,
