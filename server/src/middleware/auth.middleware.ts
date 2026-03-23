@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import User from "../models/user";
+import User from "../models/user.js";
 
 interface JwtPayload {
   userId: string;
@@ -14,17 +14,12 @@ declare global {
         userId: string;
         role: string;
         email: string;
-        permissions?: any;
       };
     }
   }
 }
 
-export const authenticate = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+export const authenticate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const token = req.cookies?.token || req.headers.authorization?.replace("Bearer ", "");
 
@@ -47,12 +42,7 @@ export const authenticate = async (
       return;
     }
 
-    req.user = {
-      userId: user._id.toString(),
-      role: user.role,
-      email: user.email,
-      permissions: user.adminPermissions
-    };
+    req.user = { userId: user._id.toString(), role: user.role, email: user.email };
 
     next();
   } catch (error) {
@@ -74,33 +64,10 @@ export const authorize = (...roles: string[]) => {
       res.status(401).json({ success: false, message: "Authentication required" });
       return;
     }
-
     if (!roles.includes(req.user.role)) {
       res.status(403).json({ success: false, message: "Access denied" });
       return;
     }
-
     next();
-  };
-};
-
-export const checkPermission = (permission: string) => {
-  return (req: Request, res: Response, next: NextFunction): void => {
-    if (!req.user) {
-      res.status(401).json({ success: false, message: "Authentication required" });
-      return;
-    }
-
-    if (req.user.role === "superadmin") {
-      next();
-      return;
-    }
-
-    if (req.user.role === "admin" && req.user.permissions?.[permission]) {
-      next();
-      return;
-    }
-
-    res.status(403).json({ success: false, message: "Insufficient permissions" });
   };
 };

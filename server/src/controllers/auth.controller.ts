@@ -1,50 +1,37 @@
 import bcrypt from "bcryptjs";
-import jwt, { type JwtPayload } from "jsonwebtoken";
-import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
 import type { Request, Response } from "express";
-import { User } from "../models/index.js";
- 
-const secret = process.env.JWT_SECRET || "default-secret-key-change-in-production";
+import User from "../models/user.js";
 
-interface DecodedToken extends JwtPayload {
-  id: string;
-}
+const signToken = (userId: string, role: string) =>
+  jwt.sign({ userId, role }, process.env.JWT_SECRET!, { expiresIn: "7d" });
 
 export async function register(req: Request, res: Response) {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, phone } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    if (!name || !email || !password) {
+      return res.status(400).json({ success: false, message: "Name, email and password are required" });
+    }
 
-    const user = await User.create({
-      name,
-      email,
-      passwordHash: hashedPassword,
-      role
-    });
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ success: false, message: "Email already registered" });
+    }
 
-    const token = jwt.sign(
-      { id: user._id.toString() },
-      secret,
-      { expiresIn: "7d" }
-    );
+    const passwordHash = await bcrypt.hash(password, 10);
+    const user = await User.create({ name, email, passwordHash, phone, role: "customer" });
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      sameSite: "lax"
-    });
+    const token = signToken(user._id.toString(), user.role);
 
     res.status(201).json({
-      message: "User registered successfully",
-      user
+      success: true,
+      message: "Registered successfully",
+      token,
+      user: { id: user._id, name: user.name, email: user.email, role: user.role }
     });
-
-  } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    res.status(500).json({
-      message: "Registration failed",
-      error: errorMessage
-    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
   }
 }
 
@@ -52,75 +39,107 @@ export async function login(req: Request, res: Response) {
   try {
     const { email, password } = req.body;
 
-    const isUserExists = await User.findOne({ email: email as string });
-
-    if (!isUserExists) {
-      return res.status(401).json({
-        message: "User account not found"
-      });
+    if (!email || !password) {
+      return res.status(400).json({ success: false, message: "Email and password are required" });
     }
 
-    const isPasswordValid = await bcrypt.compare(
-      password,
-      isUserExists.passwordHash
-    );
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ success: false, message: "Invalid email or password" });
+    }
 
+    if (!user.isActive) {
+      return res.status(403).json({ success: false, message: "Account is deactivated" });
+    }
+
+    if (user.lockUntil && user.lockUntil > new Date()) {
+      return res.status(423).json({ success: false, message: "Account temporarily locked" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordValid) {
-      return res.status(401).json({
-        message: "Invalid password"
-      });
+      user.loginAttempts += 1;
+      if (user.loginAttempts >= 5) {
+        user.lockUntil = new Date(Date.now() + 15 * 60 * 1000); // lock 15 mins
+      }
+      await user.save();
+      return res.status(401).json({ success: false, message: "Invalid email or password" });
     }
 
-    const token = jwt.sign(
-      { id: isUserExists._id.toString() },
-      secret,
-      { expiresIn: "7d" }
-    );
+    // Reset login attempts on success
+    user.loginAttempts = 0;
+    user.lockUntil = undefined;
+    user.lastLogin = new Date();
+    await user.save();
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      sameSite: "lax",
-      maxAge: 1000 * 60 * 60 * 24 * 7
-    });
+    const token = signToken(user._id.toString(), user.role);
 
     res.status(200).json({
-      message: "User logged in successfully"
+      success: true,
+      message: "Logged in successfully",
+      token,
+      user: { id: user._id, name: user.name, email: user.email, role: user.role }
     });
-
-  } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    res.status(500).json({
-      message: errorMessage
-    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
   }
 }
 
-export async function users(req: Request, res: Response) {
-  const { token } = req.cookies;
-  if (!token) {
-    return res.status(401).json({
-      message: "Unauthorized access"
-    });
-  }
+export async function getMe(req: Request, res: Response) {
   try {
-    const decoded = jwt.verify(token, secret) as DecodedToken;
-    const user = await User.findOne({
-      _id: new mongoose.Types.ObjectId(decoded.id)
-    }).select("-passwordHash -__v").lean();
-    res.status(200).json({
-      message: "user data fetched Successfully",
-      user
-    });
-  } catch (error) {
-    return res.status(401).json({
-      message: "Unauthorized- Invalid Token"
-    });
+    const user = await User.findById(req.user!.userId).select("-passwordHash -loginAttempts -lockUntil -__v");
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    res.status(200).json({ success: true, data: user });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
   }
 }
 
 export async function logout(req: Request, res: Response) {
-  res.clearCookie('token');
-  res.status(200).json({
-    message: "user logged out successfully"
-  });
+  res.clearCookie("token");
+  res.status(200).json({ success: true, message: "Logged out successfully" });
+}
+
+// Superadmin only - update user role
+export async function updateUserRole(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+
+    if (!role || !["customer", "admin"].includes(role)) {
+      return res.status(400).json({ success: false, message: "Role must be 'customer' or 'admin'" });
+    }
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    if (user.role === "superadmin") {
+      return res.status(403).json({ success: false, message: "Superadmin role cannot be changed" });
+    }
+
+    user.role = role;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: `User role updated to ${role}`,
+      data: { id: user._id, name: user.name, email: user.email, role: user.role }
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+// Admin only
+export async function getAllUsers(req: Request, res: Response) {
+  try {
+    const users = await User.find().select("-passwordHash -loginAttempts -lockUntil -__v");
+    res.status(200).json({ success: true, data: users });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
 }

@@ -1,1 +1,1 @@
-export { authenticate, authorize, checkPermission } from "./auth.middleware";
+export { authenticate, authorize } from "./auth.middleware";
