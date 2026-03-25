@@ -1,12 +1,35 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import type { Request, Response } from "express";
-import User from "../models/user.js";
+import User, { type IUser } from "../models/user.js";
+
+interface RegisterBody {
+  name: string;
+  email: string;
+  password: string;
+  phone?: string;
+}
+
+interface LoginBody {
+  email: string;
+  password: string;
+}
+
+interface UpdateRoleBody {
+  role: "customer" | "admin";
+}
 
 const signToken = (userId: string, role: string) =>
   jwt.sign({ userId, role }, process.env.JWT_SECRET!, { expiresIn: "7d" });
 
-export async function register(req: Request, res: Response) {
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "strict" as const,
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+};
+
+export async function register(req: Request<{}, {}, RegisterBody>, res: Response) {
   try {
     const { name, email, password, phone } = req.body;
 
@@ -20,14 +43,20 @@ export async function register(req: Request, res: Response) {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, passwordHash, phone, role: "customer" });
+    const user = await User.create({
+      name,
+      email,
+      passwordHash,
+      ...(phone && { phone }),
+      role: "customer"
+    });
 
     const token = signToken(user._id.toString(), user.role);
+    res.cookie("token", token, COOKIE_OPTIONS);
 
     res.status(201).json({
       success: true,
       message: "Registered successfully",
-      token,
       user: { id: user._id, name: user.name, email: user.email, role: user.role }
     });
   } catch (error: any) {
@@ -35,7 +64,7 @@ export async function register(req: Request, res: Response) {
   }
 }
 
-export async function login(req: Request, res: Response) {
+export async function login(req: Request<{}, {}, LoginBody>, res: Response) {
   try {
     const { email, password } = req.body;
 
@@ -68,20 +97,24 @@ export async function login(req: Request, res: Response) {
 
     // Reset login attempts on success
     user.loginAttempts = 0;
-    user.lockUntil = undefined;
+    user.lockUntil = null;
     user.lastLogin = new Date();
     await user.save();
 
     const token = signToken(user._id.toString(), user.role);
 
+    // Set separate cookie name for admin vs customer for clarity
+    const cookieName = (user.role === "admin" || user.role === "superadmin") ? "adminToken" : "token";
+    res.cookie(cookieName, token, COOKIE_OPTIONS);
+
     res.status(200).json({
       success: true,
       message: "Logged in successfully",
-      token,
       user: { id: user._id, name: user.name, email: user.email, role: user.role }
     });
   } catch (error: any) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error("Login error:", error);
+    res.status(500).json({ success: false, message: error.message || "Login failed" });
   }
 }
 
@@ -99,11 +132,52 @@ export async function getMe(req: Request, res: Response) {
 
 export async function logout(req: Request, res: Response) {
   res.clearCookie("token");
+  res.clearCookie("adminToken");
   res.status(200).json({ success: true, message: "Logged out successfully" });
 }
 
+// Only for first-time setup or super admin creation
+export async function createAdmin(req: Request, res: Response) {
+  try {
+    const { name, email, password, setupToken } = req.body;
+
+    // Security: Only allow if SETUP_TOKEN env var matches
+    if (process.env.SETUP_TOKEN && setupToken !== process.env.SETUP_TOKEN) {
+      return res.status(401).json({ success: false, message: "Invalid setup token" });
+    }
+
+    if (!name || !email || !password) {
+      return res.status(400).json({ success: false, message: "Name, email and password are required" });
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ success: false, message: "Email already registered" });
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+    const admin = await User.create({
+      name,
+      email,
+      passwordHash,
+      role: "admin",
+      isActive: true,
+      loginAttempts: 0,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Admin user created successfully",
+      user: { id: admin._id, name: admin.name, email: admin.email, role: admin.role }
+    });
+  } catch (error: any) {
+    console.error("Admin creation error:", error);
+    res.status(500).json({ success: false, message: error.message || "Failed to create admin" });
+  }
+}
+
 // Superadmin only - update user role
-export async function updateUserRole(req: Request, res: Response) {
+export async function updateUserRole(req: Request<{ id: string }, {}, UpdateRoleBody>, res: Response) {
   try {
     const { id } = req.params;
     const { role } = req.body;

@@ -17,17 +17,26 @@ export const getAllProducts = async (req: Request, res: Response) => {
       maxPrice,
       carat,
       color,
-      clarity,
-      cut,
       shape,
       metal,
+      diamondType,
       search,
-      sort = "-createdAt"
+      sort = "-createdAt",
+      isActive
     } = req.query;
 
-    const filter: any = { isActive: true };
+    const filter: any = {};
+    if (isActive !== "all") filter.isActive = true;
 
-    if (category) filter.category = category;
+    if (category) {
+      const categoryDoc = await Category.findOne(
+        String(category).match(/^[a-f\d]{24}$/i)
+          ? { _id: category }
+          : { slug: category }
+      );
+      if (categoryDoc) filter.category = categoryDoc._id;
+      else filter.category = category;
+    }
     if (minPrice || maxPrice) {
       filter.price = {};
       if (minPrice) filter.price.$gte = Number(minPrice);
@@ -35,10 +44,18 @@ export const getAllProducts = async (req: Request, res: Response) => {
     }
     if (carat) filter.carat = Number(carat);
     if (color) filter.color = color;
-    if (clarity) filter.clarity = clarity;
-    if (cut) filter.cut = cut;
-    if (shape) filter.shape = shape;
-    if (metal) filter.metal = metal;
+    if (shape) {
+      const shapes = String(shape).split(',').map(s => s.trim()).filter(Boolean);
+      filter.shape = shapes.length === 1 ? shapes[0] : { $in: shapes };
+    }
+    if (metal) {
+      const metals = String(metal).split(',').map(s => s.trim()).filter(Boolean);
+      filter.metal = metals.length === 1 ? metals[0] : { $in: metals };
+    }
+    if (diamondType) {
+      const types = String(diamondType).split(',').map(s => s.trim()).filter(Boolean);
+      filter.diamondType = types.length === 1 ? types[0] : { $in: types };
+    }
     if (search) {
       const safeSearch = escapeStringRegexp(String(search));
       filter.$or = [
@@ -110,9 +127,9 @@ export const getProductById = async (req: Request, res: Response) => {
 // Create new product (Admin)
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const { name, price, sku, category, description, images, stock, carat, color, clarity, cut, shape, metal, salePrice, tags, isActive } = req.body;
+    const { name, price, sku, category, description, images, stock, carat, color, shape, metal, salePrice, tags, video, diamondType, isActive } = req.body;
     const slug = generateSlug(name);
-    const product = await Product.create({ name, slug, price, sku, category, description, images, stock, carat, color, clarity, cut, shape, metal, salePrice, tags, isActive });
+    const product = await Product.create({ name, slug, price, sku, category, description, images, stock, carat, color, shape, metal, salePrice, tags, video, diamondType, isActive });
     res.status(201).json({ success: true, data: product });
   } catch (error) {
     const msg = error instanceof Error ? error.message : "Internal server error";
@@ -124,8 +141,15 @@ export const createProduct = async (req: Request, res: Response) => {
 export const updateProduct = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { name, price, sku, category, description, images, stock, carat, color, clarity, cut, shape, metal, salePrice, tags, isActive } = req.body;
-    const product = await Product.findByIdAndUpdate(id, { name, price, sku, category, description, images, stock, carat, color, clarity, cut, shape, metal, salePrice, tags, isActive }, { new: true, runValidators: true });
+    const { name, price, sku, category, description, images, stock, carat, color, shape, metal, salePrice, tags, video, diamondType, isActive } = req.body;
+
+    const update: any = { name, price, sku, category, description, images, stock, carat, color, shape, metal, salePrice, tags, diamondType, isActive };
+    if (video !== undefined) update.video = video;
+
+    // Remove undefined keys so existing DB values are not overwritten
+    Object.keys(update).forEach((key) => update[key] === undefined && delete update[key]);
+
+    const product = await Product.findByIdAndUpdate(id, { $set: update }, { new: true, runValidators: true });
 
     if (!product) {
       return res.status(404).json({ success: false, message: "Product not found" });
@@ -243,10 +267,8 @@ export const getRelatedProducts = async (req: Request, res: Response) => {
 // Get filter options
 export const getFilterOptions = async (req: Request, res: Response) => {
   try {
-    const [colors, clarities, cuts, shapes, metals, categories] = await Promise.all([
+    const [colors, shapes, metals, categories] = await Promise.all([
       Product.distinct("color", { isActive: true }),
-      Product.distinct("clarity", { isActive: true }),
-      Product.distinct("cut", { isActive: true }),
       Product.distinct("shape", { isActive: true }),
       Product.distinct("metal", { isActive: true }),
       Category.find({ isActive: true }, "name slug")
@@ -261,8 +283,6 @@ export const getFilterOptions = async (req: Request, res: Response) => {
       success: true,
       data: {
         colors: colors.filter(Boolean),
-        clarities: clarities.filter(Boolean),
-        cuts: cuts.filter(Boolean),
         shapes: shapes.filter(Boolean),
         metals: metals.filter(Boolean),
         categories,

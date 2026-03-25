@@ -12,12 +12,12 @@ const ProductSchema = new Schema(
     images: [{ type: String, trim: true }],
     carat: { type: Number, min: 0 },
     color: { type: String, enum: ["D", "E", "F", "G", "H", "I", "J", "K", "L", "M"] },
-    clarity: { type: String, enum: ["FL", "IF", "VVS1", "VVS2", "VS1", "VS2", "SI1", "SI2", "I1", "I2", "I3"] },
-    cut: { type: String, enum: ["Excellent", "Very Good", "Good", "Fair", "Poor"] },
-    shape: { type: String, enum: ["Round", "Princess", "Cushion", "Emerald", "Oval", "Radiant", "Asscher", "Marquise", "Heart", "Pear"] },
-    metal: { type: String, enum: ["Gold", "White Gold", "Rose Gold", "Yellow Gold", "Platinum", "Silver", "Sterling Silver"] },
+    shape: { type: String, enum: ["Round", "Princess", "Solitaire", "Cushion", "Three Stone", "Halo", "Emerald", "Oval", "Radiant", "Asscher", "Marquise", "Heart", "Pear", "Elongated Cushion", "Trillion", "Baguette", "Rose Cut"] },
+    metal: { type: String, enum: ["9K White Gold", "9K Yellow Gold", "9K Rose Gold", "18K Rose Gold", "18K White Gold", "18K Yellow Gold", "Platinum"] },
     stock: { type: Number, default: 0, min: 0 },
     tags: [{ type: String, trim: true, lowercase: true }],
+    video: { type: String },
+    diamondType: { type: String, enum: ["Lab Diamond", "Natural Diamond"] },
     isActive: { type: Boolean, default: true }
   },
   { timestamps: true }

@@ -21,7 +21,7 @@ declare global {
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const token = req.cookies?.token || req.headers.authorization?.replace("Bearer ", "");
+    const token = req.cookies?.adminToken || req.cookies?.token || req.headers.authorization?.replace("Bearer ", "");
 
     if (!token) {
       res.status(401).json({ success: false, message: "Authentication required" });
