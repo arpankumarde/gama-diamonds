@@ -22,7 +22,7 @@ export async function getCategoryById(req: Request, res: Response) {
 
 export async function createCategory(req: Request, res: Response) {
   try {
-    const { name, description, parent } = req.body;
+    const { name, description, parent, image, featured } = req.body;
     if (!name) return res.status(400).json({ success: false, message: "Name is required" });
 
     const slug = name.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-");
@@ -30,7 +30,7 @@ export async function createCategory(req: Request, res: Response) {
     const existing = await Category.findOne({ slug });
     if (existing) return res.status(400).json({ success: false, message: "Category already exists" });
 
-    const category = await Category.create({ name, slug, description, parent });
+    const category = await Category.create({ name, slug, description, parent, image, featured });
     res.status(201).json({ success: true, data: category });
   } catch (error: any) {
     res.status(400).json({ success: false, message: error.message });

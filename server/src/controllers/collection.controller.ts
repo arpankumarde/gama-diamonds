@@ -8,14 +8,10 @@ const generateSlug = (name: string) =>
 
 export const createCollection = async (req: Request, res: Response) => {
   try {
-    const { name, description, categories, image, isActive, sortOrder, productIds } = req.body;
+    const { name, description, categories, image, isActive, sortOrder, productIds, curator } = req.body;
 
     if (!name) {
       return res.status(400).json({ success: false, message: "name is required" });
-    }
-
-    if (!categories || !Array.isArray(categories) || categories.length === 0) {
-      return res.status(400).json({ success: false, message: "At least one category is required" });
     }
 
     const slug = generateSlug(name);
@@ -32,7 +28,7 @@ export const createCollection = async (req: Request, res: Response) => {
     }
 
     const collection = await Collection.create({
-      name, slug, description, categories, image, isActive, sortOrder,
+      name, slug, description, categories, image, isActive, sortOrder, curator,
       products: validIds
     });
 
@@ -45,9 +41,10 @@ export const createCollection = async (req: Request, res: Response) => {
 export const updateCollection = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { name, description, categories, image, isActive, sortOrder } = req.body;
+    const { name, description, categories, image, isActive, sortOrder, curator } = req.body;
 
     const updateData: any = { description, image, isActive, sortOrder };
+    if (curator !== undefined) updateData.curator = curator;
     if (name) {
       updateData.name = name;
       updateData.slug = generateSlug(name);

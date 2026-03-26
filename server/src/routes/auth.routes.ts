@@ -1,5 +1,5 @@
 import express from "express";
-import { register, login, getMe, logout, getAllUsers, updateUserRole } from "../controllers/auth.controller.js";
+import { register, login, getMe, logout, getAllUsers, updateUserRole, createAdmin } from "../controllers/auth.controller.js";
 import { authenticate, authorize } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
@@ -7,6 +7,9 @@ const router = express.Router();
 // Public
 router.post("/register", register);
 router.post("/login", login);
+
+// Setup endpoint - secured with SETUP_TOKEN
+router.post("/admin/create", createAdmin);
 
 // Protected
 router.get("/me", authenticate, getMe);

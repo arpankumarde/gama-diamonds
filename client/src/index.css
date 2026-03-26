@@ -1,7 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
+
 
 @custom-variant dark (&:is(.dark *));
 
@@ -75,7 +76,8 @@
 }
 
 @theme inline {
-  --font-sans: "Geist Variable", sans-serif;
+  --font-sans: "Jost", sans-serif;
+
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -84,11 +86,13 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
+
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
   --color-chart-2: var(--chart-2);
   --color-chart-1: var(--chart-1);
+
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -107,6 +111,7 @@
   --color-card: var(--card);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -120,10 +125,92 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  html {
+    font-family: "Jost", sans-serif;
+    height: 100%;
+    background-color: var(--background);
+    overscroll-behavior-y: none;
+  }
+
   body {
     @apply bg-background text-foreground;
+    font-family: "Jost", sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    background-color: var(--background);
   }
-  html {
-    @apply font-sans;
+
+  #root {
+    min-height: 100vh;
+    background-color: var(--background);
   }
+
+  .admin-shell input,
+  .admin-shell textarea,
+  .admin-shell [data-slot="input"],
+  .admin-shell [data-slot="select-trigger"],
+  .admin-shell [data-slot="select-content"],
+  .admin-shell [data-slot="select-item"] {
+    color: #000 !important;
+    caret-color: #000 !important;
+  }
+
+  .admin-shell input::placeholder,
+  .admin-shell textarea::placeholder,
+  .admin-shell [data-slot="input"]::placeholder {
+    color: #6b7280 !important;
+    opacity: 1;
+  }
+
+  .admin-shell button[data-variant="outline"],
+  .admin-shell button[data-variant="ghost"] {
+    color: #000 !important;
+  }
+
+  .admin-shell button[data-variant="outline"]:hover,
+  .admin-shell button[data-variant="ghost"]:hover,
+  .admin-shell [data-slot="select-item"]:hover,
+  .admin-shell [data-slot="select-item"]:focus {
+    color: #000 !important;
+  }
+
+  .admin-shell button[data-variant="outline"] svg,
+  .admin-shell button[data-variant="ghost"] svg,
+  .admin-shell button[data-variant="outline"]:hover svg,
+  .admin-shell button[data-variant="ghost"]:hover svg {
+    color: inherit !important;
+    stroke: currentColor;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: default;
+  }
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(70px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeUp {
+  animation: fadeUp 1.6s ease-out forwards;
+}
+
+.font-luxury {
+  font-family: "Cormorant Garamond", serif;
 }
