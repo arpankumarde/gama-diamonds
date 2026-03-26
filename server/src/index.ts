@@ -4,8 +4,6 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 import cookieParser from "cookie-parser";
 import { config } from "dotenv";
-import path from "path";
-import { fileURLToPath } from "url";
 import connectToDatabase from "./db/db.js";
 import authRoutes from "./routes/auth.routes.js";
 import productRoutes from "./routes/product.routes.js";
@@ -18,8 +16,6 @@ config();
 
 const app = express();
 const port = process.env.PORT || 5001;
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 // CORS should be before helmet
 app.use(cors({
   origin: process.env.NODE_ENV === "production"
@@ -45,7 +41,7 @@ if (process.env.NODE_ENV === "production") {
 }
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+// Static uploads removed — files are now served from Cloudinary
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
