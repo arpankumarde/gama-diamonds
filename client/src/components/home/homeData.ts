@@ -1,9 +1,10 @@
 import { FileCheck, Gift, PenTool, RefreshCcw, type LucideIcon } from "lucide-react";
 
 export const heroImages = [
-  "/images/herobanner.webp",
+  
   "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1800",
   "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=1800",
+  "/images/herobanner.webp",
 ];
 
 export const shapeItems = [

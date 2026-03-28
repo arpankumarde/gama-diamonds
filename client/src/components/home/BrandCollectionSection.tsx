@@ -5,7 +5,7 @@ export default function BrandCollectionSection() {
   const { activeBrand, setActiveBrand } = useHomeContext();
 
   return (
-    <section className="bg-[#f8f8f8] py-10 md:py-12 px-4 md:px-8 lg:px-12">
+    <section className="bg-[radial-gradient(1200px_circle_at_50%_0%,rgba(15,45,42,0.10)_0%,rgba(15,45,42,0.03)_45%,rgba(255,255,255,1)_100%)] py-10 md:py-12 px-4 md:px-8 lg:px-12">
       <div className="flex justify-center gap-4 md:gap-8 lg:gap-10 mb-10 md:mb-16 flex-wrap">
         {brandSections.map((item, index) => (
           <button
@@ -13,8 +13,8 @@ export default function BrandCollectionSection() {
             onClick={() => setActiveBrand(index)}
             className={`tracking-[2px] md:tracking-[3px] uppercase pb-2 transition ${
               activeBrand === index
-                ? "text-[14px] md:text-[16px] lg:text-[18px] border-b-2 border-[#333] text-[#333]"
-                : "text-[11px] md:text-[13px] text-[#777]"
+                ? "text-[14px] md:text-[16px] lg:text-[18px] border-b-2 border-brand-gold text-brand-green"
+                : "text-[11px] md:text-[13px] text-black/45 hover:text-brand-green"
             }`}
           >
             {item.title}
@@ -23,7 +23,7 @@ export default function BrandCollectionSection() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center max-w-[1400px] mx-auto">
-        <div className="group overflow-hidden">
+        <div className="group overflow-hidden rounded-2xl border border-brand-gold/10 shadow-[0_16px_40px_rgba(0,0,0,0.10)]">
           <img
             src={brandSections[activeBrand].image}
             alt=""
@@ -32,15 +32,15 @@ export default function BrandCollectionSection() {
         </div>
 
         <div className="max-w-full md:max-w-[520px]">
-          <p className="text-[11px] md:text-[12px] tracking-[3px] md:tracking-[4px] uppercase text-[#666] mb-6 md:mb-8">
+          <p className="text-[11px] md:text-[12px] tracking-[3px] md:tracking-[4px] uppercase text-brand-gold mb-6 md:mb-8">
             {brandSections[activeBrand].address}
           </p>
 
-          <h3 className="text-[16px] md:text-[18px] lg:text-[20px] tracking-[4px] md:tracking-[5px] uppercase font-light mb-6 md:mb-8 text-[#333]">
+          <h3 className="text-[16px] md:text-[18px] lg:text-[20px] tracking-[4px] md:tracking-[5px] uppercase font-light mb-6 md:mb-8 text-[#111]">
             {brandSections[activeBrand].heading}
           </h3>
 
-          <p className="text-[13px] md:text-[14px] leading-7 md:leading-8 text-[#444] font-light">
+          <p className="text-[13px] md:text-[14px] leading-7 md:leading-8 text-black/75 font-light">
             {brandSections[activeBrand].text}
           </p>
         </div>

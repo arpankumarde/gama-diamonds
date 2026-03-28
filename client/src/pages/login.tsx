@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useUser } from "@/contexts/user-context";
+import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { login, isAuthenticated } = useUser();
@@ -41,52 +43,92 @@ export default function Login() {
   };
 
   return (
-    <section className="bg-[#f8f8f8] min-h-screen border-t border-[#dddddd] flex items-start justify-center px-4 pt-12 pb-16 md:pt-16">
-      <div className="w-full max-w-[460px] text-center">
-        <h2 className="text-[20px] tracking-[6px] uppercase font-light text-[#333] mb-2">
-          Login
-        </h2>
+    <section className="bg-[linear-gradient(135deg,rgba(15,45,42,0.95)_0%,rgba(7,18,17,1)_100%)] min-h-screen flex items-center justify-center px-4 py-12">
+      <div className="absolute inset-0 opacity-40">
+        <div className="w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNkM2EwMmEiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMSI+PC9jaXJjbGU+PC9nPjwvZz48L3N2Zz4=')]" />
+      </div>
+      
+      <div className="relative w-full max-w-[480px] bg-white/5 backdrop-blur-sm border border-brand-gold/20 rounded-2xl shadow-[0_0_0_1px_rgba(211,160,42,0.08),0_32px_64px_rgba(0,0,0,0.35)] p-8 md:p-12">
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <span className="block w-8 h-[1px] bg-brand-gold/60"></span>
+            <p className="text-[10px] tracking-[4px] uppercase text-brand-gold/70">Welcome Back</p>
+            <span className="block w-8 h-[1px] bg-brand-gold/60"></span>
+          </div>
+          
+          <h2 className="text-[22px] md:text-[26px] tracking-[4px] md:tracking-[6px] uppercase font-light text-white mb-3">
+            Login
+          </h2>
+          
+          <p className="text-[13px] md:text-[14px] text-white/70 leading-6">
+            Please enter your credentials to access your account
+          </p>
+        </div>
 
-        <p className="text-[15px] text-[#555] mb-10">
-          Please enter your e-mail and password:
-        </p>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="relative">
+            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-brand-gold/60" />
+            <input
+              type="email"
+              placeholder="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full h-[56px] pl-12 pr-5 border border-brand-gold/20 bg-white/10 backdrop-blur-sm rounded-lg outline-none text-[14px] text-white placeholder:text-white/50 focus:border-brand-gold/60 focus:bg-white/15 transition duration-300"
+              required
+            />
+          </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full h-[56px] px-5 border border-[#d9d9d9] bg-white outline-none text-[15px] text-black"
-            required
-          />
+          <div className="relative">
+            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-brand-gold/60" />
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full h-[56px] pl-12 pr-12 border border-brand-gold/20 bg-white/10 backdrop-blur-sm rounded-lg outline-none text-[14px] text-white placeholder:text-white/50 focus:border-brand-gold/60 focus:bg-white/15 transition duration-300"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-gold/60 hover:text-brand-gold transition"
+            >
+              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            </button>
+          </div>
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full h-[56px] px-5 border border-[#d9d9d9] bg-white outline-none text-[15px] text-black"
-            required
-          />
-
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
+              <p className="text-red-400 text-[13px] text-center">{error}</p>
+            </div>
+          )}
 
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full h-[56px] bg-black text-white tracking-[4px] uppercase text-[13px] mt-7 hover:opacity-90 transition disabled:opacity-50"
+            className="w-full h-[56px] bg-brand-gold text-brand-green tracking-[3px] uppercase text-[12px] md:text-[13px] font-semibold rounded-lg hover:bg-brand-gold-soft hover:shadow-[0_8px_24px_rgba(211,160,42,0.25)] transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-8"
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Signing In..." : "Sign In"}
           </button>
         </form>
 
-        <p className="mt-10 text-[15px] text-[#666]">
-          Don't have an account?{" "}
-          <Link to="/signup" className="underline">
-            Create one
-          </Link>
-        </p>
+        <div className="mt-8 text-center">
+          <div className="flex items-center gap-4 mb-6">
+            <span className="flex-1 h-[1px] bg-brand-gold/20"></span>
+            <span className="text-[11px] tracking-[2px] uppercase text-white/50">Or</span>
+            <span className="flex-1 h-[1px] bg-brand-gold/20"></span>
+          </div>
+          
+          <p className="text-[13px] md:text-[14px] text-white/70">
+            Don't have an account?{" "}
+            <Link 
+              to="/signup" 
+              className="text-brand-gold hover:text-white transition duration-300 underline underline-offset-4"
+            >
+              Create Account
+            </Link>
+          </p>
+        </div>
       </div>
     </section>
   );
