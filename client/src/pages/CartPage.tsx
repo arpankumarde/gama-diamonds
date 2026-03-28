@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
 import { useCart } from "@/components/cart/cart-context";
 
 function formatPrice(price: number) {
@@ -16,72 +16,106 @@ export default function CartPage() {
   }, []);
 
   return (
-    <section className="min-h-screen border-t border-[#dddddd] bg-[#f8f8f8] px-4 py-8 md:px-10 md:py-12">
+    <section className="min-h-screen bg-[linear-gradient(180deg,rgba(15,45,42,0.08)_0%,rgba(255,255,255,1)_100%)] px-4 py-8 md:px-10 md:py-12">
       <div className="mx-auto max-w-[1620px]">
-        <h1 className="mb-10 text-center text-[24px] tracking-[8px] uppercase text-[#4b4b4b] md:mb-14 md:text-[32px]">
-          Cart
-        </h1>
+        {/* Header */}
+        <div className="text-center mb-10 md:mb-14">
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <span className="block w-10 h-[1px] bg-brand-gold/50"></span>
+            <p className="text-[10px] tracking-[4px] uppercase text-brand-gold/70">Your Selection</p>
+            <span className="block w-10 h-[1px] bg-brand-gold/50"></span>
+          </div>
+          <h1 className="text-[24px] md:text-[32px] tracking-[6px] md:tracking-[8px] uppercase font-light">
+            <span className="text-[#111]">Shopping </span>
+            <span className="text-brand-gold">Cart</span>
+          </h1>
+        </div>
 
         {items.length === 0 ? (
-          <div className="border border-[#e3e3e3] bg-white px-6 py-16 text-center md:px-10">
-            <p className="text-[18px] tracking-[4px] uppercase text-[#4b4b4b]">Your cart is empty</p>
-            <p className="mt-4 text-[15px] text-[#666]">Add a product from the catalog to see it here.</p>
+          <div className="bg-white/80 backdrop-blur-sm border border-brand-gold/15 rounded-2xl shadow-[0_0_0_1px_rgba(211,160,42,0.08),0_20px_50px_rgba(0,0,0,0.10)] px-8 md:px-12 py-16 md:py-20 text-center">
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-brand-green/10 mx-auto flex items-center justify-center mb-6 md:mb-8">
+              <ShoppingBag className="w-8 h-8 md:w-10 md:h-10 text-brand-green" strokeWidth={1.5} />
+            </div>
+            <h2 className="text-[18px] md:text-[22px] tracking-[4px] uppercase font-light text-[#111] mb-4">
+              Your Cart is Empty
+            </h2>
+            <p className="text-[14px] md:text-[15px] text-black/60 mb-8 md:mb-10 leading-6">
+              Discover our exquisite collection of diamonds and fine jewelry
+            </p>
             <Link
               to="/products"
-              className="mt-8 inline-block bg-black px-10 py-4 text-[12px] tracking-[4px] uppercase text-white"
+              className="inline-flex items-center gap-3 bg-brand-gold text-brand-green px-8 md:px-10 py-4 md:py-5 text-[12px] md:text-[13px] tracking-[3px] uppercase font-semibold rounded-lg hover:bg-brand-gold-soft hover:shadow-[0_8px_24px_rgba(211,160,42,0.25)] transition duration-300"
             >
+              <ArrowLeft className="w-4 h-4" />
               Continue Shopping
             </Link>
           </div>
         ) : (
           <>
-            <div className="hidden border-b border-[#dddddd] pb-6 md:grid md:grid-cols-[1.5fr_280px_160px] md:gap-8">
-              <p className="text-[13px] tracking-[4px] uppercase text-[#666]">Product</p>
-              <p className="text-[13px] tracking-[4px] uppercase text-[#666] text-center">Quantity</p>
-              <p className="text-[13px] tracking-[4px] uppercase text-[#666] text-right">Total</p>
+            {/* Desktop Header */}
+            <div className="hidden border-b border-brand-gold/20 pb-6 md:grid md:grid-cols-[1.5fr_280px_160px] md:gap-8 bg-white/50 backdrop-blur-sm rounded-t-2xl px-6 md:px-8">
+              <p className="text-[12px] md:text-[13px] tracking-[3px] md:tracking-[4px] uppercase text-brand-green font-medium">Product</p>
+              <p className="text-[12px] md:text-[13px] tracking-[3px] md:tracking-[4px] uppercase text-brand-green font-medium text-center">Quantity</p>
+              <p className="text-[12px] md:text-[13px] tracking-[3px] md:tracking-[4px] uppercase text-brand-green font-medium text-right">Total</p>
             </div>
 
-            <div className="divide-y divide-[#dddddd] border-y border-[#dddddd]">
-              {items.map((item) => (
-                <div key={item.id} className="grid gap-4 py-6 md:grid-cols-[1.5fr_280px_160px] md:items-center md:gap-8 md:py-8">
+            {/* Cart Items */}
+            <div className="bg-white/80 backdrop-blur-sm border border-brand-gold/15 rounded-2xl shadow-[0_0_0_1px_rgba(211,160,42,0.08),0_20px_50px_rgba(0,0,0,0.10)] divide-y divide-brand-gold/10">
+              {items.map((item, index) => (
+                <div key={item.id} className={`grid gap-4 p-6 md:p-8 md:grid-cols-[1.5fr_280px_160px] md:items-center md:gap-8 ${index === 0 ? 'rounded-t-2xl' : ''} ${index === items.length - 1 ? 'rounded-b-2xl' : ''}`}>
                   <div className="grid grid-cols-[110px_1fr] items-start gap-4 md:grid-cols-[180px_1fr] md:gap-8">
-
-                    <Link to={`/product/${item.productSlug}`} className="block hover:opacity-90 transition">
-                      <div className="overflow-hidden bg-white">
-                        <img src={item.image} alt={item.title} className="h-[110px] w-full object-cover md:h-[180px] cursor-pointer" />
+                    <Link to={`/product/${item.productSlug}`} className="block group">
+                      <div className="overflow-hidden rounded-xl border border-brand-gold/10 bg-white shadow-[0_8px_20px_rgba(0,0,0,0.08)]">
+                        <img 
+                          src={item.image} 
+                          alt={item.title} 
+                          className="h-[110px] w-full object-cover md:h-[180px] transition-transform duration-500 group-hover:scale-105" 
+                        />
                       </div>
                     </Link>
 
-
-                    <Link to={`/product/${item.productSlug}`} className="block hover:opacity-90 transition">
-                      <div className="cursor-pointer">
-                        <p className="text-[14px] leading-[1.45] tracking-[3px] uppercase text-[#4b4b4b] md:text-[18px] md:tracking-[4px]">
+                    <Link to={`/product/${item.productSlug}`} className="block group">
+                      <div>
+                        <h3 className="text-[14px] md:text-[16px] leading-[1.4] tracking-[2px] md:tracking-[3px] uppercase font-light text-[#111] group-hover:text-brand-gold transition duration-300">
                           {item.title}
+                        </h3>
+                        <div className="mt-3 md:mt-4 space-y-2">
+                          <div className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-brand-gold"></span>
+                            <p className="text-[11px] md:text-[12px] tracking-[2px] uppercase text-black/60">
+                              {item.diamondType} Diamond
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-brand-gold"></span>
+                            <p className="text-[11px] md:text-[12px] text-black/60">{item.metal}</p>
+                          </div>
+                          {item.size && (
+                            <div className="flex items-center gap-2">
+                              <span className="w-2 h-2 rounded-full bg-brand-gold"></span>
+                              <p className="text-[11px] md:text-[12px] text-black/60">Size: {item.size}</p>
+                            </div>
+                          )}
+                        </div>
+                        <p className="mt-4 md:mt-5 text-[15px] md:text-[18px] tracking-[2px] md:tracking-[3px] font-medium text-brand-green">
+                          {formatPrice(item.price)}
                         </p>
-                        <span className="mt-2 inline-flex h-6 items-center text-[12px] font-semibold tracking-[2px] uppercase text-black md:mt-3 md:h-7">
-                          x{item.quantity}
-                        </span>
-                        <p className="mt-3 text-[12px] tracking-[2px] uppercase text-[#666] md:mt-4 md:text-[14px] md:tracking-[3px]">
-                          {item.diamondType} Diamond
-                        </p>
-                        <p className="mt-1 text-[12px] text-[#666] md:text-[14px]">{item.metal}</p>
-                        {item.size && <p className="mt-1 text-[12px] text-[#666] md:text-[14px]">Size: {item.size}</p>}
-                        <p className="mt-3 text-[15px] tracking-[2px] text-[#666] md:mt-4 md:text-[18px] md:tracking-[3px]">{formatPrice(item.price)}</p>
 
-                        <div className="mt-4 flex items-center justify-between md:hidden">
-                          <div className="flex h-[44px] items-center border border-[#dddddd] px-2">
+                        {/* Mobile Quantity Controls */}
+                        <div className="mt-6 flex items-center justify-between md:hidden">
+                          <div className="flex items-center border border-brand-gold/20 rounded-lg bg-white/50 backdrop-blur-sm">
                             <button
                               type="button"
                               onClick={(event) => {
                                 event.preventDefault();
                                 updateQuantity(item.id, item.quantity - 1);
                               }}
-                              className="p-2 text-[#666] transition hover:text-black"
+                              className="p-3 text-brand-green hover:text-brand-gold transition duration-300"
                               aria-label="Decrease quantity"
                             >
-                              <Minus size={16} />
+                              <Minus size={16} strokeWidth={2} />
                             </button>
-                            <span className="mx-3 min-w-6 text-center text-[16px] text-[#555]">
+                            <span className="mx-4 min-w-8 text-center text-[16px] font-medium text-[#111]">
                               {item.quantity}
                             </span>
                             <button
@@ -90,10 +124,10 @@ export default function CartPage() {
                                 event.preventDefault();
                                 updateQuantity(item.id, item.quantity + 1);
                               }}
-                              className="p-2 text-[#666] transition hover:text-black"
+                              className="p-3 text-brand-green hover:text-brand-gold transition duration-300"
                               aria-label="Increase quantity"
                             >
-                              <Plus size={16} />
+                              <Plus size={16} strokeWidth={2} />
                             </button>
                           </div>
 
@@ -103,74 +137,119 @@ export default function CartPage() {
                               event.preventDefault();
                               removeItem(item.id);
                             }}
-                            className="text-[12px] tracking-[3px] uppercase text-[#666] underline underline-offset-4"
+                            className="flex items-center gap-2 text-[11px] tracking-[2px] uppercase text-red-500 hover:text-red-600 transition duration-300"
                           >
+                            <Trash2 size={14} strokeWidth={1.5} />
                             Remove
                           </button>
                         </div>
                       </div>
                     </Link>
-
                   </div>
 
+                  {/* Desktop Quantity Controls */}
                   <div className="hidden md:flex md:flex-col md:items-center md:gap-4">
-                    <div className="flex h-[72px] items-center border border-[#dddddd] px-4">
+                    <div className="flex items-center border border-brand-gold/20 rounded-lg bg-white/50 backdrop-blur-sm">
                       <button
                         type="button"
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                        className="p-3 text-[#666] transition hover:text-black"
+                        className="p-4 text-brand-green hover:text-brand-gold transition duration-300"
                         aria-label="Decrease quantity"
                       >
-                        <Minus size={22} />
+                        <Minus size={20} strokeWidth={2} />
                       </button>
-                      <span className="mx-6 min-w-8 text-center text-[20px] text-[#555]">{item.quantity}</span>
+                      <span className="mx-6 min-w-10 text-center text-[18px] font-medium text-[#111]">
+                        {item.quantity}
+                      </span>
                       <button
                         type="button"
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="p-3 text-[#666] transition hover:text-black"
+                        className="p-4 text-brand-green hover:text-brand-gold transition duration-300"
                         aria-label="Increase quantity"
                       >
-                        <Plus size={22} />
+                        <Plus size={20} strokeWidth={2} />
                       </button>
                     </div>
                     <button
                       type="button"
                       onClick={() => removeItem(item.id)}
-                      className="text-[14px] tracking-[4px] uppercase text-[#666] underline underline-offset-4"
+                      className="flex items-center gap-2 text-[12px] tracking-[3px] uppercase text-red-500 hover:text-red-600 transition duration-300"
                     >
+                      <Trash2 size={14} strokeWidth={1.5} />
                       Remove
                     </button>
                   </div>
 
-                  <div className="text-left text-[18px] tracking-[4px] text-[#666] md:text-right">
-                    {formatPrice(item.price * item.quantity)}
+                  {/* Item Total */}
+                  <div className="text-left md:text-right">
+                    <p className="text-[16px] md:text-[18px] tracking-[3px] md:tracking-[4px] font-medium text-brand-green">
+                      {formatPrice(item.price * item.quantity)}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_420px] lg:items-start">
-              <div>
-                <label htmlFor="order-note" className="mb-5 block text-[16px] text-[#4b4b4b] md:text-[18px]">
-                  Add Order Note
-                </label>
+            {/* Bottom Section */}
+            <div className="mt-12 md:mt-16 grid gap-10 lg:grid-cols-[1fr_480px] lg:items-start">
+              {/* Order Note */}
+              <div className="bg-white/80 backdrop-blur-sm border border-brand-gold/15 rounded-2xl shadow-[0_0_0_1px_rgba(211,160,42,0.08),0_20px_50px_rgba(0,0,0,0.10)] p-6 md:p-8">
+                <div className="flex items-center gap-3 mb-5 md:mb-6">
+                  <span className="block w-6 h-[1px] bg-brand-gold"></span>
+                  <label htmlFor="order-note" className="text-[14px] md:text-[16px] tracking-[2px] uppercase font-medium text-brand-green">
+                    Add Order Note
+                  </label>
+                </div>
                 <textarea
                   id="order-note"
                   value={orderNote}
                   onChange={(event) => setOrderNote(event.target.value)}
-                  placeholder="Please add additional instructions here."
-                  className="min-h-[180px] w-full border border-[#dddddd] bg-white px-6 py-5 text-[15px] text-[#555] outline-none"
+                  placeholder="Please add any special instructions or requests here..."
+                  className="min-h-[160px] md:min-h-[180px] w-full border border-brand-gold/20 bg-white/50 backdrop-blur-sm rounded-lg px-4 md:px-6 py-4 md:py-5 text-[14px] md:text-[15px] text-[#111] placeholder:text-black/40 outline-none focus:border-brand-gold/60 transition duration-300 resize-none"
                 />
               </div>
 
-              <div className="lg:justify-self-end lg:text-right">
-                <p className="text-[20px] tracking-[4px] uppercase text-[#4b4b4b]">
-                  Total: {formatPrice(subtotal)}
-                </p>
-                <p className="mt-6 text-[18px] text-[#666]">Shipping & taxes calculated at checkout</p>
-                <button className="mt-8 w-full bg-black px-10 py-5 text-[13px] tracking-[5px] uppercase text-white lg:w-auto lg:min-w-[280px]">
-                  Checkout
+              {/* Order Summary */}
+              <div className="bg-white/80 backdrop-blur-sm border border-brand-gold/15 rounded-2xl shadow-[0_0_0_1px_rgba(211,160,42,0.08),0_20px_50px_rgba(0,0,0,0.10)] p-6 md:p-8 lg:justify-self-end">
+                <div className="flex items-center gap-3 mb-6 md:mb-8">
+                  <span className="block w-6 h-[1px] bg-brand-gold"></span>
+                  <h3 className="text-[14px] md:text-[16px] tracking-[2px] uppercase font-medium text-brand-green">
+                    Order Summary
+                  </h3>
+                </div>
+                
+                <div className="space-y-4 mb-6 md:mb-8">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[13px] md:text-[14px] text-black/60">Subtotal ({items.length} {items.length === 1 ? 'item' : 'items'})</span>
+                    <span className="text-[14px] md:text-[15px] font-medium text-[#111]">{formatPrice(subtotal)}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-[13px] md:text-[14px] text-black/60">Shipping</span>
+                    <span className="text-[14px] md:text-[15px] font-medium text-brand-gold">Calculated at checkout</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-[13px] md:text-[14px] text-black/60">Tax</span>
+                    <span className="text-[14px] md:text-[15px] font-medium text-brand-gold">Calculated at checkout</span>
+                  </div>
+                </div>
+                
+                <div className="border-t border-brand-gold/20 pt-4 mb-6 md:mb-8">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[16px] md:text-[18px] tracking-[3px] uppercase font-medium text-brand-green">Total</span>
+                    <span className="text-[18px] md:text-[20px] tracking-[3px] font-semibold text-brand-green">{formatPrice(subtotal)}</span>
+                  </div>
+                </div>
+                
+                <button className="w-full bg-brand-gold text-brand-green px-8 md:px-10 py-4 md:py-5 text-[12px] md:text-[13px] tracking-[3px] md:tracking-[4px] uppercase font-semibold rounded-lg hover:bg-brand-gold-soft hover:shadow-[0_8px_24px_rgba(211,160,42,0.25)] transition duration-300">
+                  Proceed to Checkout
                 </button>
+                
+                <Link 
+                  to="/products"
+                  className="block w-full text-center mt-4 text-[11px] md:text-[12px] tracking-[2px] uppercase text-brand-green hover:text-brand-gold transition duration-300"
+                >
+                  Continue Shopping
+                </Link>
               </div>
             </div>
           </>

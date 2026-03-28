@@ -1,3 +1,5 @@
+import { Heart } from "lucide-react";
+
 type ProductCardProps = {
   image: string;
   title: string;
@@ -11,21 +13,40 @@ export default function ProductCard({
 }: ProductCardProps) {
   return (
     <div className="group text-center">
-      <div className="overflow-hidden bg-[#f2f2f2]">
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-[220px] md:h-[250px] lg:h-[280px] object-cover bg-[#f2f2f2] transition-transform duration-[1800ms] ease-out group-hover:scale-[1.05]"
-        />
+      <div className="relative overflow-hidden rounded-2xl border border-brand-gold/15 bg-white shadow-[0_0_0_1px_rgba(211,160,42,0.08),0_16px_40px_rgba(0,0,0,0.10)] transition duration-500 group-hover:border-brand-gold/50 group-hover:shadow-[0_0_0_1px_rgba(211,160,42,0.20),0_20px_48px_rgba(0,0,0,0.15)]">
+        <div className="overflow-hidden">
+          <img
+            src={image}
+            alt={title}
+            className="w-full h-[220px] md:h-[250px] lg:h-[280px] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08]"
+          />
+        </div>
+        
+        {/* Heart icon - always visible */}
+        <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center group-hover:bg-brand-gold group-hover:text-white transition duration-300">
+          <Heart className="w-4 h-4 text-brand-gold group-hover:text-white" strokeWidth={1.5} />
+        </div>
+        
+        {/* Rating overlay on hover */}
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-green/50 via-brand-green/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end justify-center pb-6">
+          <div className="flex items-center gap-1 text-white">
+            <span className="text-[10px] tracking-[2px] uppercase font-medium">★★★★★</span>
+          </div>
+        </div>
       </div>
 
-      <p className="mt-4 md:mt-5 text-[13px] md:text-[14px] leading-5 md:leading-6 text-[#444] font-light">
-        {title}
-      </p>
+      <div className="mt-4 md:mt-5">
+        <p className="text-[12px] md:text-[13px] leading-5 md:leading-6 text-[#111] font-light group-hover:text-brand-gold transition duration-300">
+          {title}
+        </p>
 
-      <p className="mt-2 md:mt-3 text-[16px] md:text-[18px] font-semibold text-[#444]">
-        {price}
-      </p>
+        <p className="mt-2 md:mt-3 text-[15px] md:text-[16px] font-semibold text-brand-gold">
+          {price}
+        </p>
+        
+        {/* Decorative underline */}
+        <div className="w-0 h-[1px] bg-brand-gold mx-auto mt-2 group-hover:w-8 transition-all duration-500"></div>
+      </div>
     </div>
   );
 }

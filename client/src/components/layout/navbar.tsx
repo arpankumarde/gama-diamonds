@@ -140,7 +140,7 @@ function MobileMenu() {
           {items.map((item) => (
             <li 
               key={item} 
-              className="text-[11px] tracking-[2px] uppercase text-[#666666] cursor-pointer hover:text-black transition"
+              className="text-[11px] tracking-[2px] uppercase text-white/70 cursor-pointer hover:text-brand-gold transition"
             >
               {item}
             </li>
@@ -157,21 +157,21 @@ function MobileMenu() {
                 className="flex items-center justify-between cursor-pointer"
                 onClick={() => handleSubSectionClick(key)}
               >
-                <span className="text-[11px] tracking-[2px] uppercase text-[#666666] hover:text-black transition">
+                <span className="text-[11px] tracking-[2px] uppercase text-white/70 hover:text-brand-gold transition">
                   {key}
                 </span>
                 {activeSubSection === key ? (
-                  <Minus size={14} strokeWidth={1.5} className="text-[#999999]" />
+                  <Minus size={14} strokeWidth={1.5} className="text-brand-gold" />
                 ) : (
-                  <Plus size={14} strokeWidth={1.5} className="text-[#999999]" />
+                  <Plus size={14} strokeWidth={1.5} className="text-brand-gold" />
                 )}
               </div>
               {activeSubSection === key && (
-                <ul className="ml-4 mt-2 space-y-2 border-l border-[#e0e0e0] pl-3">
+                <ul className="ml-4 mt-2 space-y-2 border-l border-white/15 pl-3">
                   {value.map((subItem) => (
                     <li 
                       key={subItem} 
-                      className="text-[10px] tracking-[1.5px] uppercase text-[#888888] cursor-pointer hover:text-black transition"
+                      className="text-[10px] tracking-[1.5px] uppercase text-white/60 cursor-pointer hover:text-brand-gold transition"
                     >
                       {subItem}
                     </li>
@@ -191,24 +191,24 @@ function MobileMenu() {
         <Menu 
           size={26} 
           strokeWidth={1.5} 
-          className="cursor-pointer hover:opacity-70 transition text-[#222222]"
+          className="cursor-pointer hover:opacity-70 transition text-brand-gold"
         />
       </SheetTrigger>
       <SheetContent 
         side="left" 
-        className="w-[85%] max-w-[360px] bg-white p-0 border-r border-[#f0f0f0]"
+        className="w-[85%] max-w-[360px] bg-brand-green text-white p-0 border-r border-white/10"
         showCloseButton={false}
       >
         <div className="flex flex-col h-full overflow-hidden">
           {/* Header with close */}
-          <div className="flex items-center justify-between px-5 py-5 border-b border-[#f0f0f0]">
+          <div className="flex items-center justify-between px-5 py-5 border-b border-white/10">
             <button 
               onClick={() => setOpen(false)}
               className="p-1 hover:opacity-60 transition"
             >
-              <X size={24} strokeWidth={1.5} className="text-[#333333]" />
+              <X size={24} strokeWidth={1.5} className="text-white/90" />
             </button>
-            <span className="text-xs tracking-[3px] uppercase text-[#999999] font-light">
+            <span className="text-xs tracking-[3px] uppercase text-brand-gold font-light">
               Menu
             </span>
             <div className="w-6" /> {/* Spacer for alignment */}
@@ -220,28 +220,28 @@ function MobileMenu() {
               <div key={item}>
                 <button
                   onClick={() => handleMenuClick(item)}
-                  className={`w-full px-5 py-4 flex items-center justify-between text-left hover:bg-[#fafafa] transition ${
-                    activeSection === item ? "bg-[#fafafa]" : ""
+                  className={`w-full px-5 py-4 flex items-center justify-between text-left hover:bg-white/5 transition ${
+                    activeSection === item ? "bg-white/5" : ""
                   }`}
                 >
-                  <span className="text-[13px] tracking-[2px] uppercase font-normal text-[#222222]">
+                  <span className="text-[13px] tracking-[2px] uppercase font-normal text-white/85">
                     {item}
                   </span>
                   {expandableItems.includes(item) && (
                     activeSection === item ? (
-                      <Minus size={16} strokeWidth={1.5} className="text-[#666666]" />
+                      <Minus size={16} strokeWidth={1.5} className="text-brand-gold" />
                     ) : (
-                      <Plus size={16} strokeWidth={1.5} className="text-[#666666]" />
+                      <Plus size={16} strokeWidth={1.5} className="text-brand-gold" />
                     )
                   )}
                 </button>
                 
                 {/* Accordion content */}
                 {activeSection === item && mobileMenuData[item] && (
-                  <div className="bg-[#fafafa] px-5 py-4 border-b border-[#f0f0f0]">
+                  <div className="bg-white/5 px-5 py-4 border-b border-white/10">
                     {mobileMenuData[item].sections.map((section) => (
                       <div key={section.title} className="mb-5 last:mb-0">
-                        <h4 className="text-[10px] tracking-[2px] uppercase text-[#999999] font-normal mb-3">
+                        <h4 className="text-[10px] tracking-[2px] uppercase text-brand-gold font-normal mb-3">
                           {section.title}
                         </h4>
                         {renderSubItems(section.items)}
@@ -252,18 +252,18 @@ function MobileMenu() {
                 
                 {/* Divider line */}
                 {index < menuItems.length - 1 && (
-                  <div className="mx-5 border-t border-[#f0f0f0]" />
+                  <div className="mx-5 border-t border-white/10" />
                 )}
               </div>
             ))}
           </nav>
 
           {/* Bottom section */}
-          <div className="border-t border-[#f0f0f0] px-5 py-5 space-y-4">
+          <div className="border-t border-white/10 px-5 py-5 space-y-4">
 
             
             {/* Book Appointment */}
-            <button className="w-full py-3 border border-[#333333] text-[11px] tracking-[2px] uppercase text-[#222222] hover:bg-black hover:text-white transition">
+            <button className="w-full py-3 border border-brand-gold text-[11px] tracking-[2px] uppercase text-brand-gold hover:bg-brand-gold hover:text-brand-green transition rounded-lg">
               Book a Free Consultation
             </button>
             
@@ -274,7 +274,7 @@ function MobileMenu() {
                 <a
                   key={social.label}
                   href={social.href}
-                  className="text-[#666666] hover:text-black transition"
+                  className="text-white/70 hover:text-brand-gold transition"
                   aria-label={social.label}
                 >
                   <social.icon size={18} strokeWidth={1.5} />
@@ -286,7 +286,7 @@ function MobileMenu() {
             <div className="relative">
               <button 
                 onClick={() => setCountryDropdownOpen(!countryDropdownOpen)}
-                className="flex items-center justify-center gap-2 text-[11px] tracking-[2px] text-[#999999] font-light pt-2 w-full"
+                className="flex items-center justify-center gap-2 text-[11px] tracking-[2px] text-white/70 font-light pt-2 w-full hover:text-brand-gold transition"
               >
                 <House size={14} strokeWidth={1.5} />
                 <span>{selectedCountry.name} ({selectedCountry.currency} {selectedCountry.symbol})</span>
@@ -299,7 +299,7 @@ function MobileMenu() {
               
               {/* Dropdown */}
               {countryDropdownOpen && (
-                <div className="absolute bottom-full left-0 right-0 bg-white border border-[#f0f0f0] shadow-lg mb-2 py-2">
+                <div className="absolute bottom-full left-0 right-0 bg-brand-green border border-white/10 shadow-lg mb-2 py-2">
                   {countries.map((country) => (
                     <button
                       key={country.code}
@@ -307,8 +307,8 @@ function MobileMenu() {
                         setSelectedCountry(country);
                         setCountryDropdownOpen(false);
                       }}
-                      className={`w-full px-4 py-2 text-left text-[11px] tracking-[1.5px] uppercase hover:bg-[#fafafa] transition ${
-                        selectedCountry.code === country.code ? 'text-black font-medium' : 'text-[#999999]'
+                      className={`w-full px-4 py-2 text-left text-[11px] tracking-[1.5px] uppercase hover:bg-white/5 transition ${
+                        selectedCountry.code === country.code ? 'text-brand-gold font-medium' : 'text-white/70'
                       }`}
                     >
                       {country.name} ({country.currency} {country.symbol})
@@ -386,17 +386,20 @@ function MegaMenu({ activeMenu }: { activeMenu: string }) {
   if (!menuData) return null;
 
   return (
-    <div className="absolute left-0 top-full w-full bg-[#f7f7f7] shadow-lg border-t z-50">
-      <div className="max-w-[1440px] mx-auto px-4 md:px-12 py-8 md:py-10 grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-10">
+    <div className="absolute left-0 top-full w-full bg-brand-green/95 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.25)] border-t-2 border-brand-gold/60 z-50">
+      <div className="max-w-[1440px] mx-auto px-4 md:px-12 py-8 md:py-12 grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-10">
         {/* Columns */}
         {menuData.columns.map((col, index) => (
           <div key={index} className="col-span-1">
-            <h4 className="text-[11px] tracking-[3px] uppercase text-gray-500 mb-4 md:mb-5 font-normal">
-              {col.title}
-            </h4>
+            <div className="flex items-center gap-2 mb-4 md:mb-6">
+              <span className="block w-4 h-[1px] bg-brand-gold/60"></span>
+              <h4 className="text-[11px] md:text-[12px] tracking-[3px] uppercase text-brand-gold font-medium">
+                {col.title}
+              </h4>
+            </div>
             <ul className="space-y-2 md:space-y-3 text-[11px] md:text-[12px] tracking-[2px] md:tracking-[3px] uppercase">
               {col.items.map((item) => (
-                <li key={item} className="cursor-pointer hover:text-black transition text-[#222222]">
+                <li key={item} className="cursor-pointer hover:text-brand-gold transition duration-300 text-white/80 hover:translate-x-1">
                   {item}
                 </li>
               ))}
@@ -407,14 +410,14 @@ function MegaMenu({ activeMenu }: { activeMenu: string }) {
         {/* Images */}
         {menuData.images.map((img, index) => (
           <div key={index} className="group col-span-1">
-            <div className="overflow-hidden">
+            <div className="overflow-hidden rounded-xl border border-brand-gold/20 shadow-[0_8px_24px_rgba(0,0,0,0.35)]">
               <img
                 src={img.src}
                 alt={img.label}
                 className="w-full h-[150px] md:h-[220px] object-cover transition-transform duration-[1800ms] ease-out group-hover:scale-[1.05]"
               />
             </div>
-            <p className="text-center mt-2 md:mt-3 tracking-[3px] uppercase text-[11px] md:text-[12px] text-[#222222]">
+            <p className="text-center mt-3 md:mt-4 tracking-[2px] md:tracking-[3px] uppercase text-[10px] md:text-[11px] text-white/70 group-hover:text-brand-gold transition duration-300">
               {img.label}
             </p>
           </div>
@@ -422,11 +425,11 @@ function MegaMenu({ activeMenu }: { activeMenu: string }) {
       </div>
 
       {/* Buttons */}
-      <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-6 pb-6 md:pb-8 px-4">
-        <button className="px-6 md:px-10 py-3 md:py-4 bg-white border tracking-[3px] uppercase text-[11px] md:text-[12px] hover:bg-black hover:text-white transition text-[#222222]">
+      <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-6 pb-8 md:pb-10 px-4">
+        <button className="px-6 md:px-8 py-3 md:py-4 bg-brand-gold text-brand-green border border-brand-gold tracking-[2px] md:tracking-[3px] uppercase text-[11px] md:text-[12px] font-semibold rounded-lg hover:bg-brand-gold-soft hover:shadow-[0_8px_24px_rgba(211,160,42,0.25)] transition duration-300">
           Explore {activeMenu}
         </button>
-        <button className="px-6 md:px-10 py-3 md:py-4 bg-white border tracking-[3px] uppercase text-[11px] md:text-[12px] hover:bg-black hover:text-white transition text-[#222222]">
+        <button className="px-6 md:px-8 py-3 md:py-4 bg-transparent text-brand-gold border border-brand-gold/60 tracking-[2px] md:tracking-[3px] uppercase text-[11px] md:text-[12px] font-semibold rounded-lg hover:bg-brand-gold hover:text-brand-green transition duration-300">
           Book an Appointment
         </button>
       </div>
@@ -501,7 +504,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full bg-white border-b border-[#efefef] shadow-sm relative">
+      <header className="sticky top-0 z-50 w-full bg-brand-green border-b border-white/10 shadow-none relative">
 
         {/* Main container */}
 
@@ -514,7 +517,7 @@ export default function Navbar() {
           <div className="flex items-center z-10">
             <MobileMenu />
             {!isMobile && (
-              <div className="flex items-center gap-2 text-[11px] md:text-[13px] tracking-[2px] md:tracking-[3px] text-[#6d6d6d] font-light ml-3">
+              <div className="flex items-center gap-2 text-[11px] md:text-[13px] tracking-[2px] md:tracking-[3px] text-white/70 font-light ml-3">
                 <House size={15} strokeWidth={1.5} />
                 <span>USD $</span>
               </div>
@@ -525,12 +528,13 @@ export default function Navbar() {
           <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 justify-center items-center md:top-auto md:translate-y-0 md:mt-6">
             <Link to="/" onClick={handleLogoClick} className="flex flex-col items-center justify-center leading-none">
 
-              <div className="text-[#c7a43a] text-[24px] md:text-[36px] lg:text-[42px] leading-none font-serif">
+              <div className="text-brand-gold text-[24px] md:text-[36px] lg:text-[42px] leading-none font-serif">
                 G
               </div>
 
-              <h1 className="text-[13px] md:text-[18px] lg:text-[22px] font-light tracking-[1px] leading-none text-[#111111] whitespace-nowrap">
-                GAMA DIAMONDS
+              <h1 className="text-[13px] md:text-[18px] lg:text-[22px] font-light tracking-[1px] leading-none whitespace-nowrap">
+                <span className="text-brand-gold">GAMA </span>
+                <span className="text-white">DIAMONDS</span>
               </h1>
             </Link>
           </div>
@@ -545,7 +549,7 @@ export default function Navbar() {
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
                     className="flex items-center gap-2 hover:opacity-70 transition"
                   >
-                    <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-black text-white flex items-center justify-center text-[10px] md:text-[12px] font-semibold">
+                    <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-brand-gold text-brand-green flex items-center justify-center text-[10px] md:text-[12px] font-semibold">
                       {user.name?.charAt(0).toUpperCase() || "U"}
                     </div>
                   </button>
@@ -557,17 +561,17 @@ export default function Navbar() {
                         className="fixed inset-0 z-30"
                         onClick={() => setUserMenuOpen(false)}
                       ></div>
-                      <div className="absolute right-0 mt-2 w-48 bg-white border border-[#ddd] shadow-lg z-40">
-                        <div className="px-4 py-3 border-b border-[#eee]">
-                          <p className="text-[12px] font-semibold text-[#333]">{user.name}</p>
-                          <p className="text-[11px] text-[#666]">{user.email}</p>
+                      <div className="absolute right-0 mt-2 w-56 bg-white/95 backdrop-blur-md border border-brand-gold/20 shadow-[0_8px_32px_rgba(0,0,0,0.15)] rounded-xl z-40 overflow-hidden">
+                        <div className="px-4 py-4 border-b border-brand-gold/10 bg-brand-green/5">
+                          <p className="text-[13px] font-semibold text-brand-green">{user.name}</p>
+                          <p className="text-[11px] text-black/60 mt-1">{user.email}</p>
                         </div>
                         <button
                           onClick={() => {
                             navigate("/profile");
                             setUserMenuOpen(false);
                           }}
-                          className="w-full text-left px-4 py-2 text-[13px] tracking-[1px] text-[#333] hover:bg-[#f5f5f5] transition"
+                          className="w-full text-left px-4 py-3 text-[12px] tracking-[1px] uppercase text-[#333] hover:bg-brand-green/5 hover:text-brand-green transition duration-300"
                         >
                           My Profile
                         </button>
@@ -577,7 +581,7 @@ export default function Navbar() {
                             setUserMenuOpen(false);
                             navigate("/");
                           }}
-                          className="w-full text-left px-4 py-3 border-t border-[#eee] text-[13px] tracking-[1px] text-red-600 hover:bg-[#f5f5f5] transition"
+                          className="w-full text-left px-4 py-3 border-t border-brand-gold/10 text-[12px] tracking-[1px] uppercase text-red-500 hover:bg-red-50 transition duration-300"
                         >
                           Logout
                         </button>
@@ -590,7 +594,7 @@ export default function Navbar() {
                   <User
                     size={22}
                     strokeWidth={1.5}
-                    className="w-5 h-5 md:w-6 md:h-6 cursor-pointer hover:opacity-70 transition text-black"
+                    className="w-5 h-5 md:w-6 md:h-6 cursor-pointer hover:opacity-70 transition text-white/90"
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
                   />
                   
@@ -601,18 +605,18 @@ export default function Navbar() {
                         className="fixed inset-0 z-30"
                         onClick={() => setUserMenuOpen(false)}
                       ></div>
-                      <div className="absolute right-0 mt-2 w-48 bg-white border border-[#ddd] shadow-lg z-40">
+                      <div className="absolute right-0 mt-2 w-48 bg-white/95 backdrop-blur-md border border-brand-gold/20 shadow-[0_8px_32px_rgba(0,0,0,0.15)] rounded-xl z-40 overflow-hidden">
                         <Link
                           to="/login"
                           onClick={() => setUserMenuOpen(false)}
-                          className="block w-full px-4 py-3 text-[13px] tracking-[1px] text-[#333] hover:bg-[#f5f5f5] transition text-center border-b border-[#eee]"
+                          className="block w-full px-4 py-4 text-[12px] tracking-[2px] uppercase font-medium text-brand-green hover:bg-brand-green/5 transition duration-300 text-center border-b border-brand-gold/10"
                         >
                           Login
                         </Link>
                         <Link
                           to="/signup"
                           onClick={() => setUserMenuOpen(false)}
-                          className="block w-full px-4 py-3 text-[13px] tracking-[1px] text-[#333] hover:bg-[#f5f5f5] transition text-center"
+                          className="block w-full px-4 py-4 text-[12px] tracking-[2px] uppercase font-medium text-brand-green hover:bg-brand-green/5 transition duration-300 text-center"
                         >
                           Sign Up
                         </Link>
@@ -627,7 +631,7 @@ export default function Navbar() {
               <Search
                 size={22}
                 strokeWidth={1.5}
-                className="w-5 h-5 md:w-6 md:h-6 cursor-pointer hover:opacity-70 transition text-black"
+                className="w-5 h-5 md:w-6 md:h-6 cursor-pointer hover:opacity-70 transition text-white/90"
                 onClick={() => setSearchOpen(true)}
               />
             </div>
@@ -636,10 +640,10 @@ export default function Navbar() {
               <ShoppingBag
                 size={22}
                 strokeWidth={1.5}
-                className="w-5 h-5 md:w-6 md:h-6 cursor-pointer hover:opacity-70 transition text-black"
+                className="w-5 h-5 md:w-6 md:h-6 cursor-pointer hover:opacity-70 transition text-white/90"
               />
               {cartCount > 0 && (
-                <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-black px-1 text-[10px] text-white">
+                <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-gold px-1 text-[10px] text-brand-green">
                   {cartCount}
                 </span>
               )}
@@ -649,13 +653,13 @@ export default function Navbar() {
           
           {/* Menu - Desktop Only */}
           {!isMobile && (
-            <nav className="flex justify-center flex-wrap gap-x-6 lg:gap-x-10 gap-y-2 pt-10 md:pt-14 text-[11px] md:text-[12px] tracking-[2px] md:tracking-[3px] font-normal text-[#222222]">
+            <nav className="flex justify-center flex-wrap gap-x-6 lg:gap-x-10 gap-y-2 pt-10 md:pt-14 text-[11px] md:text-[12px] tracking-[2px] md:tracking-[3px] font-normal text-white/80">
 
               {menuItems.map((item) => (
                 <div key={item} className="relative">
                   <button
                     onClick={() => handleMenuClick(item)}
-                    className={`uppercase whitespace-nowrap relative text-[#222222] hover:text-black transition after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-[1px] after:bg-black hover:after:w-full after:transition-all ${
+                    className={`uppercase whitespace-nowrap relative text-white/80 hover:text-brand-gold transition after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-[1px] after:bg-brand-gold hover:after:w-full after:transition-all ${
                       activeMenu === item ? "after:w-full" : ""
                     }`}
                   >
@@ -686,26 +690,28 @@ export default function Navbar() {
             {/* Search Bar */}
             <div
               ref={searchDrawerRef}
-              className="absolute left-0 top-full w-full bg-white z-50 border-t border-b border-[#ddd] h-16 md:h-[80px] flex items-center px-4 md:px-14"
+              className="absolute left-0 top-full w-full bg-brand-green/95 backdrop-blur-md z-50 border-t-2 border-brand-gold/60 border-b border-brand-gold/20 h-16 md:h-[80px] flex items-center px-4 md:px-14 shadow-[0_8px_32px_rgba(0,0,0,0.25)]"
             >
-
-              <Search size={24} strokeWidth={1.5} className="text-[#777] w-5 h-5 md:w-6 md:h-6" />
+              <Search size={24} strokeWidth={1.5} className="text-brand-gold/70 w-5 h-5 md:w-6 md:h-6" />
 
               <input
                 type="text"
-                placeholder="SEARCH..."
-                className="ml-3 md:ml-5 flex-1 text-[16px] md:text-[20px] tracking-[3px] md:tracking-[5px] outline-none bg-transparent text-[#555]"
+                placeholder="SEARCH FOR DIAMONDS, RINGS, JEWELRY..."
+                className="ml-3 md:ml-5 flex-1 text-[14px] md:text-[18px] tracking-[2px] md:tracking-[4px] outline-none bg-transparent text-white placeholder:text-white/50 font-light"
                 autoFocus
               />
 
-              <button onClick={() => setSearchOpen(false)}>
-                <X size={24} strokeWidth={1.5} className="text-[#777] w-5 h-5 md:w-7 md:h-7" />
+              <button 
+                onClick={() => setSearchOpen(false)}
+                className="p-2 hover:bg-white/10 rounded-lg transition duration-300"
+              >
+                <X size={24} strokeWidth={1.5} className="text-brand-gold/70 hover:text-white w-5 h-5 md:w-6 md:h-6" />
               </button>
             </div>
 
             {/* Overlay */}
             <div
-              className="fixed inset-0 top-[140px] md:top-[220px] bg-black/35 z-40"
+              className="fixed inset-0 top-[140px] md:top-[220px] bg-black/40 backdrop-blur-sm z-40"
               onClick={() => setSearchOpen(false)}
             ></div>
           </>
