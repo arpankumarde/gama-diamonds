@@ -21,7 +21,7 @@ const isProd = process.env.NODE_ENV === "production";
 app.use(cors({
   origin: isProd ? process.env.CLIENT_URL : true,
   credentials: true,
-})); 
+}));
 
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }

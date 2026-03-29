@@ -1,7 +1,7 @@
 export default function WeddingRingsSection() {
   return (
     <section className="bg-[#0a1f1d] px-4 md:px-8 py-12 md:py-16 border-y border-brand-gold/20">
-      <p className="text-center text-[10px] md:text-[11px] tracking-[4px] uppercase text-brand-gold/70 mb-3">Timeless Elegance</p>
+      <p className="text-center text-[13px] tracking-[3px] uppercase text-brand-gold mb-3">Timeless Elegance</p>
       <h3 className="text-center text-[16px] md:text-[18px] lg:text-[20px] tracking-[4px] md:tracking-[5px] font-light uppercase mb-10 md:mb-14">
         <span className="text-white">Wedding </span>
         <span className="text-brand-gold">Rings</span>

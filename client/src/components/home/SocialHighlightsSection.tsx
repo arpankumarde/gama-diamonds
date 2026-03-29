@@ -12,7 +12,7 @@ export default function SocialHighlightsSection() {
     <section className="bg-brand-green py-12 md:py-20 px-4 md:px-8 lg:px-12 border-t-2 border-brand-gold/60">
       <div className="flex flex-col md:flex-row justify-between items-center mb-8 md:mb-12 gap-3 md:gap-0">
         <div>
-          <p className="text-[10px] tracking-[4px] uppercase text-brand-gold/70 mb-2">As Seen Online</p>
+          <p className="text-[13px] tracking-[3px] uppercase text-brand-gold mb-2">As Seen Online</p>
           <h3 className="text-[16px] md:text-[20px] tracking-[3px] md:tracking-[4px] uppercase">
             <span className="text-white">Social </span>
             <span className="text-brand-gold">Highlights</span>

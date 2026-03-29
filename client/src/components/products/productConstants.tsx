@@ -15,18 +15,18 @@ export function AccordionItem({
   children,
 }: AccordionItemProps) {
   return (
-    <div className="border-b border-[#E5E5E5]">
+    <div className="border-b border-brand-gold/15">
       <button
         onClick={onToggle}
         className="w-full py-4 flex items-center justify-between text-left"
       >
-        <span className="text-[12px] tracking-[1.5px] uppercase text-[#1A1A1A] font-normal font-sans">
+        <span className="text-[12px] tracking-[2px] uppercase text-brand-green font-medium font-sans">
           {title}
         </span>
         {isOpen ? (
-          <Minus size={14} strokeWidth={2} className="text-[#1A1A1A]" />
+          <Minus size={14} strokeWidth={2} className="text-brand-gold" />
         ) : (
-          <ChevronLeft size={14} strokeWidth={2} className="text-[#1A1A1A]" />
+          <ChevronLeft size={14} strokeWidth={2} className="text-brand-gold" />
         )}
       </button>
       {isOpen && <div className="pb-5 pt-2">{children}</div>}

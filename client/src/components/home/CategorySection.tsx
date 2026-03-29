@@ -30,7 +30,7 @@ export default function CategorySection() {
       <div className="text-center mb-10 md:mb-16">
         <div className="flex items-center justify-center gap-4 mb-4">
           <span className="block w-10 h-[1px] bg-brand-gold/50"></span>
-          <p className="text-[10px] tracking-[4px] uppercase text-brand-gold/70">Discover Our Collections</p>
+          <p className="text-[13px] tracking-[3px] uppercase text-brand-gold/70">Discover Our Collections</p>
           <span className="block w-10 h-[1px] bg-brand-gold/50"></span>
         </div>
         

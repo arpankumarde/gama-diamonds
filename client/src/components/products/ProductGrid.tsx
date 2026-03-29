@@ -16,29 +16,27 @@ export default function ProductGrid() {
           key={item._id}
           className="group cursor-pointer block"
         >
-          <div className="relative overflow-hidden bg-[#FAFAFA] aspect-square">
+          <div className="relative overflow-hidden rounded-xl border border-brand-gold/15 bg-white shadow-[0_0_0_1px_rgba(211,160,42,0.08),0_8px_24px_rgba(0,0,0,0.08)] transition duration-500 group-hover:border-brand-gold/50 group-hover:shadow-[0_0_0_1px_rgba(211,160,42,0.20),0_16px_40px_rgba(0,0,0,0.12)] aspect-square">
             <img
               src={item.images?.[0] || '/placeholder.jpg'}
               alt={item.name}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
-            <span className="absolute top-0 left-0 w-full block text-center bg-[#1A1A1A] text-white text-[9px] py-1.5 md:py-2 tracking-[1px] uppercase">
+            <span className="absolute top-0 left-0 w-full block text-center bg-brand-green text-brand-gold text-[9px] py-1.5 md:py-2 tracking-[2px] uppercase font-medium">
               Next Day Delivery
             </span>
           </div>
           <div className="pt-3 md:pt-4 text-center">
-            <p className="text-[9px] md:text-[10px] tracking-[1.5px] text-[#999999] mb-1 md:mb-2">
-              {item.sku}
-            </p>
-            <h3 className="text-[12px] md:text-[14px] lg:text-[15px] font-serif text-[#1A1A1A] mb-1 md:mb-2">
+            <h3 className="text-[13px] md:text-[16px] lg:text-[17px] font-serif text-brand-gold mb-1 md:mb-2 group-hover:text-[#111] transition duration-300">
               {item.name}
             </h3>
-            <p className="text-[10px] md:text-[12px] text-[#999999] mb-2 md:mb-3 font-light">
+            <p className="text-[12px] md:text-[14px] text-black/50 mb-2 md:mb-3 font-light">
               {item.description}
             </p>
-            <p className="text-[14px] md:text-[16px] font-semibold text-[#1A1A1A]">
+            <p className="text-[15px] md:text-[17px] font-semibold text-brand-gold group-hover:text-[#111] transition duration-300">
               ${item.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}
             </p>
+            <div className="w-0 h-[1px] bg-brand-gold mx-auto mt-2 group-hover:w-8 transition-all duration-500"></div>
           </div>
         </Link>
       ))}

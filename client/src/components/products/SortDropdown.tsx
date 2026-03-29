@@ -29,35 +29,31 @@ export default function SortDropdown({
         onClick={mobile ? toggleMobileSort : toggleDesktopSort}
         className={
           mobile
-            ? "flex items-center gap-2 px-4 py-2.5 bg-[#F7F7F7] border border-[#E5E5E5] rounded-[4px] text-[13px] text-[#1A1A1A] font-medium min-w-[160px] justify-between"
-            : "flex items-center gap-2 px-4 py-3 bg-[#F7F7F7] border border-[#E5E5E5] rounded-[4px] text-[13px] text-[#1A1A1A] font-medium min-w-[180px] justify-between hover:bg-[#EEEEEE] transition"
+            ? "flex items-center gap-1.5 px-2 py-1.5 bg-white border-[1.8px] border-brand-gold rounded-lg text-[10px] tracking-[0.5px] uppercase text-[#111] font-medium min-w-0 w-auto justify-between hover:border-brand-gold transition duration-300 whitespace-nowrap"
+            : "flex items-center gap-1.5 px-2 py-1.5 bg-white border-[1.8px] border-brand-gold rounded-lg text-[10px] tracking-[0.5px] uppercase text-[#111] font-medium min-w-0 w-auto justify-between hover:border-brand-gold transition duration-300 whitespace-nowrap"
         }
       >
         <span className={mobile ? "truncate" : ""}>
           {sortOptions.find((o) => o.value === sortBy)?.label}
         </span>
-        <ChevronDown
-          size={14}
-          className={mobile ? "text-[#666666] flex-shrink-0" : "text-[#666666]"}
-        />
+        <ChevronDown size={14} className="text-brand-gold flex-shrink-0" />
       </button>
       {isOpen && (
         <div
           className={
             mobile
-              ? "absolute top-full right-0 mt-1 w-full min-w-[200px] bg-white border border-[#EEEEEE] rounded-[4px] shadow-lg z-50"
-              : "absolute top-full right-0 mt-1 w-full min-w-[220px] bg-white border border-[#EEEEEE] rounded-[4px] shadow-lg z-50"
+              ? "absolute top-full right-0 mt-1 w-full min-w-[200px] bg-white border-2 border-brand-gold/50 rounded-lg shadow-[0_8px_24px_rgba(0,0,0,0.12)] z-50 overflow-hidden"
+              : "absolute top-full right-0 mt-1 w-full min-w-[220px] bg-white border-2 border-brand-gold/50 rounded-lg shadow-[0_8px_24px_rgba(0,0,0,0.12)] z-50 overflow-hidden"
           }
-          style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
         >
           {sortOptions.map((option) => (
             <button
               key={option.value}
               onClick={() => selectSortOption(option.value, mobile)}
-              className={`w-full text-left ${mobile ? "px-4 py-3 text-[13px]" : "px-5 py-3.5 text-[13px]"} hover:bg-[#F7F7F7] transition ${
+              className={`w-full text-left ${mobile ? "px-4 py-3 text-[12px]" : "px-5 py-3.5 text-[12px]"} tracking-[1.5px] uppercase border-b border-brand-gold/10 last:border-0 hover:bg-brand-green/5 transition duration-300 ${
                 sortBy === option.value
-                  ? "font-semibold text-[#1A1A1A]"
-                  : "text-[#666666]"
+                  ? "text-brand-gold font-semibold"
+                  : "text-[#111]"
               }`}
             >
               {option.label}

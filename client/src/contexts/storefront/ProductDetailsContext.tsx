@@ -68,6 +68,7 @@ type ProductDetailsContextValue = {
     price: number;
     image: string;
     link: string;
+    description: string;
   }>;
   youMayLikeSliderRef: React.RefObject<HTMLDivElement | null>;
   backLabel: string;
@@ -235,6 +236,7 @@ export function ProductDetailsProvider({ children }: { children: ReactNode }) {
     price: item.salePrice || item.price,
     image: item.images[0] || "",
     link: `/product/${item.slug}`,
+    description: item.description,
   }));
   const backLabel = "Products";
 

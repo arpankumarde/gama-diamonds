@@ -14,7 +14,7 @@ export default function ShapeCard({ image, title }: ShapeCardProps) {
         />
       </div>
 
-      <p className="mt-3 md:mt-5 text-[10px] md:text-[11px] tracking-[2px] md:tracking-[3px] uppercase font-light text-white/80 group-hover:text-brand-gold transition duration-300">
+      <p className="mt-3 md:mt-5 text-[10px] md:text-[11px] tracking-[2px] md:tracking-[3px] uppercase font-light text-brand-gold group-hover:text-white transition duration-300">
         {title}
       </p>
     </div>

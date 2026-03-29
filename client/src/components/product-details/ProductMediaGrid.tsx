@@ -16,10 +16,10 @@ export default function ProductMediaGrid() {
       {fullMedia.map((item, index) => (
         <div
           key={index}
-          className="group relative overflow-hidden bg-white cursor-pointer"
+          className="group relative overflow-hidden rounded-xl border border-brand-gold/15 bg-white cursor-pointer shadow-[0_0_0_1px_rgba(211,160,42,0.05)] hover:border-brand-gold/40 transition duration-500"
         >
           {index === 0 && (
-            <span className="absolute top-0 left-0 w-full block text-center bg-black text-white text-[11px] py-2 tracking-[2px] z-10">
+            <span className="absolute top-0 left-0 w-full block text-center bg-brand-green text-brand-gold text-[11px] py-2 tracking-[2px] z-10 font-medium">
               NEXT DAY DELIVERY
             </span>
           )}

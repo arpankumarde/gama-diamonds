@@ -77,7 +77,7 @@ export default function LuxuryDropdown({
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
       {/* Label */}
-      <label className="block text-[16px] md:text-[17px] font-semibold text-black mb-2 md:mb-3">
+      <label className="block text-[16px] md:text-[17px] font-semibold text-brand-green mb-2 md:mb-3">
         {label}
       </label>
 
@@ -86,17 +86,17 @@ export default function LuxuryDropdown({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={`
-          w-full h-[58px] bg-white border border-[#d9d9d9] px-4
+          w-full h-[58px] bg-white border border-brand-gold/30 px-4 rounded-lg
           flex items-center justify-between
           transition-all duration-200
-          ${isOpen ? "border-[#999999]" : "hover:border-[#bbbbbb]"}
+          ${isOpen ? "border-brand-gold" : "hover:border-brand-gold/60"}
         `}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
         <span
-          className={`text-[18px] font-medium ${
-            selectedOption ? "text-black" : "text-[#999999]"
+          className={`text-[16px] md:text-[18px] font-medium ${
+            selectedOption ? "text-brand-gold" : "text-black/40"
           }`}
         >
           {selectedOption ? selectedOption.label : placeholder}
@@ -104,7 +104,7 @@ export default function LuxuryDropdown({
 
         {/* Arrow Icon */}
         <svg
-          className={`w-5 h-5 text-black transition-transform duration-300 ${
+          className={`w-5 h-5 text-brand-gold transition-transform duration-300 ${
             isOpen ? "rotate-180" : ""
           }`}
           viewBox="0 0 24 24"
@@ -123,8 +123,9 @@ export default function LuxuryDropdown({
       {/* Dropdown Menu */}
       <div
         className={`
-          absolute left-0 right-0 bg-white border-x border-b border-[#d9d9d9]
-          z-50 overflow-hidden
+          absolute left-0 right-0 bg-white border border-brand-gold/30 rounded-lg
+          z-50 overflow-hidden mt-1
+          shadow-[0_8px_24px_rgba(0,0,0,0.10)]
           transition-all duration-300 ease-out
           ${isOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"}
         `}
@@ -143,11 +144,11 @@ export default function LuxuryDropdown({
               onClick={() => handleSelect(option.value)}
               className={`
                 w-full text-left px-[18px] py-4
-                text-[18px] text-black
+                text-[16px] md:text-[18px]
                 transition-colors duration-150
-                hover:bg-[#f5f5f5]
-                focus:outline-none focus:bg-[#f5f5f5]
-                ${value === option.value ? "bg-[#f5f5f5] font-medium" : ""}
+                hover:bg-brand-green/5 hover:text-brand-gold
+                focus:outline-none focus:bg-brand-green/5
+                ${value === option.value ? "text-brand-gold font-semibold bg-brand-green/5" : "text-black/70"}
               `}
               role="option"
               aria-selected={value === option.value}

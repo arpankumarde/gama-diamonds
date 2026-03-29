@@ -590,40 +590,12 @@ export default function Navbar() {
                   )}
                 </>
               ) : (
-                <>
-                  <User
-                    size={22}
-                    strokeWidth={1.5}
-                    className="w-5 h-5 md:w-6 md:h-6 cursor-pointer hover:opacity-70 transition text-white/90"
-                    onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  />
-                  
-                  {/* Login/Signup Menu */}
-                  {userMenuOpen && (
-                    <>
-                      <div 
-                        className="fixed inset-0 z-30"
-                        onClick={() => setUserMenuOpen(false)}
-                      ></div>
-                      <div className="absolute right-0 mt-2 w-48 bg-white/95 backdrop-blur-md border border-brand-gold/20 shadow-[0_8px_32px_rgba(0,0,0,0.15)] rounded-xl z-40 overflow-hidden">
-                        <Link
-                          to="/login"
-                          onClick={() => setUserMenuOpen(false)}
-                          className="block w-full px-4 py-4 text-[12px] tracking-[2px] uppercase font-medium text-brand-green hover:bg-brand-green/5 transition duration-300 text-center border-b border-brand-gold/10"
-                        >
-                          Login
-                        </Link>
-                        <Link
-                          to="/signup"
-                          onClick={() => setUserMenuOpen(false)}
-                          className="block w-full px-4 py-4 text-[12px] tracking-[2px] uppercase font-medium text-brand-green hover:bg-brand-green/5 transition duration-300 text-center"
-                        >
-                          Sign Up
-                        </Link>
-                      </div>
-                    </>
-                  )}
-                </>
+                <User
+                  size={22}
+                  strokeWidth={1.5}
+                  className="w-5 h-5 md:w-6 md:h-6 cursor-pointer hover:opacity-70 transition text-white/90"
+                  onClick={() => navigate("/signup")}
+                />
               )}
             </div>
 

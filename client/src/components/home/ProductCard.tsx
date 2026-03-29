@@ -36,16 +36,16 @@ export default function ProductCard({
       </div>
 
       <div className="mt-4 md:mt-5">
-        <p className="text-[12px] md:text-[13px] leading-5 md:leading-6 text-[#111] font-light group-hover:text-brand-gold transition duration-300">
+        <p className="text-[12px] md:text-[13px] leading-5 md:leading-6 text-brand-gold font-light group-hover:text-[#111] transition duration-300">
           {title}
         </p>
 
-        <p className="mt-2 md:mt-3 text-[15px] md:text-[16px] font-semibold text-brand-gold">
+        <p className="mt-2 md:mt-3 text-[15px] md:text-[16px] font-semibold text-brand-gold group-hover:text-[#111] transition duration-300">
           {price}
         </p>
         
-        {/* Decorative underline */}
-        <div className="w-0 h-[1px] bg-brand-gold mx-auto mt-2 group-hover:w-8 transition-all duration-500"></div>
+        {/* Decorative underline - always visible */}
+        <div className="w-8 h-[1px] bg-brand-gold mx-auto mt-2 transition-all duration-300"></div>
       </div>
     </div>
   );
