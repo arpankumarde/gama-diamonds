@@ -16,13 +16,13 @@ export default function CartPage() {
   }, []);
 
   return (
-    <section className="min-h-screen bg-[linear-gradient(180deg,rgba(15,45,42,0.08)_0%,rgba(255,255,255,1)_100%)] px-4 py-8 md:px-10 md:py-12">
+    <section className="min-h-screen bg-white px-4 py-8 md:px-10 md:py-12 border-t border-brand-gold/10">
       <div className="mx-auto max-w-[1620px]">
         {/* Header */}
         <div className="text-center mb-10 md:mb-14">
           <div className="flex items-center justify-center gap-4 mb-4">
             <span className="block w-10 h-[1px] bg-brand-gold/50"></span>
-            <p className="text-[10px] tracking-[4px] uppercase text-brand-gold/70">Your Selection</p>
+            <p className="text-[13px] tracking-[4px] uppercase text-brand-gold/70">Your Selection</p>
             <span className="block w-10 h-[1px] bg-brand-gold/50"></span>
           </div>
           <h1 className="text-[24px] md:text-[32px] tracking-[6px] md:tracking-[8px] uppercase font-light">
@@ -53,14 +53,14 @@ export default function CartPage() {
         ) : (
           <>
             {/* Desktop Header */}
-            <div className="hidden border-b border-brand-gold/20 pb-6 md:grid md:grid-cols-[1.5fr_280px_160px] md:gap-8 bg-white/50 backdrop-blur-sm rounded-t-2xl px-6 md:px-8">
+            <div className="hidden border-b border-brand-gold/20 pb-6 md:grid md:grid-cols-[1.5fr_280px_160px] md:gap-8 bg-white px-6 md:px-8">
               <p className="text-[12px] md:text-[13px] tracking-[3px] md:tracking-[4px] uppercase text-brand-green font-medium">Product</p>
               <p className="text-[12px] md:text-[13px] tracking-[3px] md:tracking-[4px] uppercase text-brand-green font-medium text-center">Quantity</p>
               <p className="text-[12px] md:text-[13px] tracking-[3px] md:tracking-[4px] uppercase text-brand-green font-medium text-right">Total</p>
             </div>
 
             {/* Cart Items */}
-            <div className="bg-white/80 backdrop-blur-sm border border-brand-gold/15 rounded-2xl shadow-[0_0_0_1px_rgba(211,160,42,0.08),0_20px_50px_rgba(0,0,0,0.10)] divide-y divide-brand-gold/10">
+            <div className="bg-white border border-brand-gold/15 rounded-2xl shadow-[0_0_0_1px_rgba(211,160,42,0.08),0_20px_50px_rgba(0,0,0,0.10)] divide-y divide-brand-gold/30">
               {items.map((item, index) => (
                 <div key={item.id} className={`grid gap-4 p-6 md:p-8 md:grid-cols-[1.5fr_280px_160px] md:items-center md:gap-8 ${index === 0 ? 'rounded-t-2xl' : ''} ${index === items.length - 1 ? 'rounded-b-2xl' : ''}`}>
                   <div className="grid grid-cols-[110px_1fr] items-start gap-4 md:grid-cols-[180px_1fr] md:gap-8">
@@ -103,7 +103,7 @@ export default function CartPage() {
 
                         {/* Mobile Quantity Controls */}
                         <div className="mt-6 flex items-center justify-between md:hidden">
-                          <div className="flex items-center border border-brand-gold/20 rounded-lg bg-white/50 backdrop-blur-sm">
+                          <div className="flex items-center border border-brand-gold/20 rounded-lg bg-white">
                             <button
                               type="button"
                               onClick={(event) => {
@@ -149,7 +149,7 @@ export default function CartPage() {
 
                   {/* Desktop Quantity Controls */}
                   <div className="hidden md:flex md:flex-col md:items-center md:gap-4">
-                    <div className="flex items-center border border-brand-gold/20 rounded-lg bg-white/50 backdrop-blur-sm">
+                    <div className="flex items-center border border-brand-gold/20 rounded-lg bg-white">
                       <button
                         type="button"
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
@@ -193,7 +193,7 @@ export default function CartPage() {
             {/* Bottom Section */}
             <div className="mt-12 md:mt-16 grid gap-10 lg:grid-cols-[1fr_480px] lg:items-start">
               {/* Order Note */}
-              <div className="bg-white/80 backdrop-blur-sm border border-brand-gold/15 rounded-2xl shadow-[0_0_0_1px_rgba(211,160,42,0.08),0_20px_50px_rgba(0,0,0,0.10)] p-6 md:p-8">
+              <div className="bg-white border border-brand-gold/15 rounded-2xl shadow-[0_0_0_1px_rgba(211,160,42,0.08),0_20px_50px_rgba(0,0,0,0.10)] p-6 md:p-8">
                 <div className="flex items-center gap-3 mb-5 md:mb-6">
                   <span className="block w-6 h-[1px] bg-brand-gold"></span>
                   <label htmlFor="order-note" className="text-[14px] md:text-[16px] tracking-[2px] uppercase font-medium text-brand-green">
@@ -205,12 +205,12 @@ export default function CartPage() {
                   value={orderNote}
                   onChange={(event) => setOrderNote(event.target.value)}
                   placeholder="Please add any special instructions or requests here..."
-                  className="min-h-[160px] md:min-h-[180px] w-full border border-brand-gold/20 bg-white/50 backdrop-blur-sm rounded-lg px-4 md:px-6 py-4 md:py-5 text-[14px] md:text-[15px] text-[#111] placeholder:text-black/40 outline-none focus:border-brand-gold/60 transition duration-300 resize-none"
+                  className="min-h-[160px] md:min-h-[180px] w-full border border-brand-gold/20 bg-white rounded-lg px-4 md:px-6 py-4 md:py-5 text-[14px] md:text-[15px] text-[#111] placeholder:text-black/40 outline-none focus:border-brand-gold/60 transition duration-300 resize-none"
                 />
               </div>
 
               {/* Order Summary */}
-              <div className="bg-white/80 backdrop-blur-sm border border-brand-gold/15 rounded-2xl shadow-[0_0_0_1px_rgba(211,160,42,0.08),0_20px_50px_rgba(0,0,0,0.10)] p-6 md:p-8 lg:justify-self-end">
+              <div className="bg-white border border-brand-gold/15 rounded-2xl shadow-[0_0_0_1px_rgba(211,160,42,0.08),0_20px_50px_rgba(0,0,0,0.10)] p-6 md:p-8 lg:justify-self-end">
                 <div className="flex items-center gap-3 mb-6 md:mb-8">
                   <span className="block w-6 h-[1px] bg-brand-gold"></span>
                   <h3 className="text-[14px] md:text-[16px] tracking-[2px] uppercase font-medium text-brand-green">

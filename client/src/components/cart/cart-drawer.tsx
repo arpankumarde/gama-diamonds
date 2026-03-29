@@ -30,101 +30,102 @@ export default function CartDrawer() {
       <SheetContent
         side="right"
         showCloseButton={false}
-        /* FIX 1: Responsive width - full on mobile, 450px on desktop */
-        className="w-full sm:max-w-[450px] border-l border-[#dddddd] bg-white p-0"
+        className="w-full sm:max-w-[450px] border-l border-brand-gold/20 bg-white p-0"
       >
         <div className="flex h-full flex-col">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-[#e8e8e8] px-4 py-5 sm:px-6">
-            <h2 className="text-[18px] sm:text-[20px] font-light tracking-[4px] uppercase text-[#3d3d3d]">Cart</h2>
+          <div className="flex items-center justify-between bg-brand-green border-b border-brand-gold/30 px-4 py-5 sm:px-6">
+            <div className="flex items-center gap-3">
+              <span className="block w-5 h-[1px] bg-brand-gold/60"></span>
+              <h2 className="text-[16px] sm:text-[18px] font-light tracking-[4px] uppercase text-white">Cart</h2>
+            </div>
             <button
               type="button"
               onClick={closeCart}
-              className="text-[#555] transition hover:text-black cursor-pointer "
+              className="text-brand-gold hover:text-white transition duration-300 cursor-pointer"
               aria-label="Close cart"
             >
-              <X size={24} strokeWidth={1.2} />
+              <X size={22} strokeWidth={1.5} />
             </button>
           </div>
 
           {/* Cart Items */}
           <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
             {items.length === 0 ? (
-              <div className="flex h-full flex-col items-center justify-center text-center">
-                <p className="text-[14px] tracking-[2px] uppercase text-[#4b4b4b]">Your cart is empty</p>
+              <div className="flex h-full flex-col items-center justify-center text-center gap-4">
+                <p className="text-[13px] tracking-[3px] uppercase text-black/50">Your cart is empty</p>
               </div>
             ) : (
               <div className="space-y-6 sm:space-y-8">
                 {items.map((item) => (
-                  /* FIX 2: Responsive Grid - smaller image on small screens */
-                  <div key={item.id} className="grid grid-cols-[80px_1fr] sm:grid-cols-[120px_1fr] items-start gap-4 sm:gap-5">
+                  <div key={item.id} className="grid grid-cols-[80px_1fr] sm:grid-cols-[100px_1fr] items-start gap-4 sm:gap-5 pb-6 border-b border-brand-gold/10 last:border-0">
                     {/* Image */}
-                    <Link 
-                      to={`/product/${item.productSlug}`} 
-                      className="block hover:opacity-90 transition"
+                    <Link
+                      to={`/product/${item.productSlug}`}
+                      className="block group"
                       onClick={handleDrawerNavigation}
                     >
-                      <div className="aspect-square overflow-hidden bg-[#f5f5f5]">
+                      <div className="aspect-square overflow-hidden rounded-lg border border-brand-gold/15 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
                         <img
                           src={item.image}
                           alt={item.title}
-                          className="h-full w-full object-cover cursor-pointer"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       </div>
                     </Link>
 
                     {/* Details */}
-                    <Link 
-                      to={`/product/${item.productSlug}`} 
-                      className="flex-1 hover:opacity-90 transition"
-                      onClick={handleDrawerNavigation}
-                    >
-                      <div className="flex flex-col min-w-0 cursor-pointer"> {/* min-w-0 prevents text from pushing the container */}
-                        <p className="text-[12px] sm:text-[13px] leading-tight tracking-[2px] uppercase text-[#333] break-words">
-                          "{item.title}"
+                    <div className="flex flex-col min-w-0">
+                      <Link
+                        to={`/product/${item.productSlug}`}
+                        onClick={handleDrawerNavigation}
+                      >
+                        <p className="text-[11px] sm:text-[12px] leading-tight tracking-[2px] uppercase text-brand-gold hover:text-brand-green transition duration-300 break-words">
+                          {item.title}
                         </p>
-                        <span className="mt-2 inline-flex h-6 items-center text-[11px] font-semibold tracking-[1px] uppercase text-black sm:h-7 sm:text-[12px]">
-                          x{item.quantity}
-                        </span>
-                        <p className="mt-1 text-[10px] sm:text-[11px] tracking-[1px] uppercase text-[#777]">
+                      </Link>
+
+                      <div className="mt-2 space-y-1">
+                        <p className="text-[10px] sm:text-[11px] tracking-[1px] uppercase text-black/50">
                           {item.diamondType} Diamond
                         </p>
-                        <p className="text-[10px] sm:text-[11px] tracking-[1px] text-[#777]">{item.metal}</p>
-                        
-                        <p className="mt-2 sm:mt-3 text-[13px] sm:text-[14px] tracking-[1px] text-[#333]">
-                          {formatPrice(item.price)}
-                        </p>
+                        <p className="text-[10px] sm:text-[11px] tracking-[1px] text-black/50">{item.metal}</p>
+                        {item.size && <p className="text-[10px] sm:text-[11px] tracking-[1px] text-black/50">Size: {item.size}</p>}
                       </div>
-                    </Link>
 
-                      <div className="flex items-center justify-between flex-wrap gap-2 ml-auto">
-                        {/* Quantity Selector - Smaller on mobile */}
-                        <div className="flex h-[30px] sm:h-[35px] text-black items-center border border-[#eeeeee] px-1 sm:px-2">
+                      <p className="mt-2 text-[13px] sm:text-[14px] font-medium text-brand-green">
+                        {formatPrice(item.price)}
+                      </p>
+
+                      <div className="flex items-center justify-between mt-3 flex-wrap gap-2">
+                        {/* Quantity */}
+                        <div className="flex h-[30px] sm:h-[34px] items-center border border-brand-gold/20 rounded-lg px-1">
                           <button
                             type="button"
                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                            className="p-1 text-black hover:text-black"
+                            className="p-1 text-brand-green hover:text-brand-gold transition duration-200"
                           >
-                            <Minus size={12} />
+                            <Minus size={12} strokeWidth={2} />
                           </button>
-                          <span className="mx-2 sm:mx-4 text-black min-w-[15px] text-center  text-[12px] sm:text-[13px]">{item.quantity}</span>
+                          <span className="mx-2 sm:mx-3 min-w-[15px] text-center text-[12px] sm:text-[13px] text-[#111]">{item.quantity}</span>
                           <button
                             type="button"
                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                            className="p-1 text-black hover:text-black"
+                            className="p-1 text-brand-green hover:text-brand-gold transition duration-200"
                           >
-                            <Plus size={12} />
+                            <Plus size={12} strokeWidth={2} />
                           </button>
                         </div>
 
                         <button
                           type="button"
                           onClick={() => removeItem(item.id)}
-                          className="text-[10px] tracking-[2px] uppercase text-black underline underline-offset-4 hover:text-black"
+                          className="text-[10px] tracking-[2px] uppercase text-red-400 hover:text-red-500 transition duration-200"
                         >
                           Remove
                         </button>
                       </div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -132,19 +133,21 @@ export default function CartDrawer() {
           </div>
 
           {/* Footer */}
-          <div className="border-t border-[#e8e8e8] px-4 py-6 sm:px-6">
-            <p className="mb-4 sm:mb-6 text-[12px] sm:text-[13px] text-[#666]">Shipping & taxes calculated at checkout</p>
-            
+          <div className="border-t border-brand-gold/15 px-4 py-6 sm:px-6 bg-white">
+            <div className="flex justify-between items-center mb-3">
+              <span className="text-[12px] tracking-[2px] uppercase text-black/50">Subtotal</span>
+              <span className="text-[15px] font-semibold text-brand-green">{formatPrice(subtotal)}</span>
+            </div>
+            <p className="mb-5 text-[11px] text-black/40 tracking-[1px]">Shipping & taxes calculated at checkout</p>
+
             <Link
               to="/cart"
               onClick={handleDrawerNavigation}
-              className="flex h-[50px] flex-col items-center justify-center bg-black text-white transition hover:bg-[#1a1a1a] w-full"
+              className="flex h-[52px] items-center justify-center bg-brand-gold text-brand-green rounded-lg hover:bg-brand-gold-soft hover:shadow-[0_8px_24px_rgba(211,160,42,0.25)] transition duration-300 w-full"
             >
-              <div className="flex items-center gap-2 text-[10px] sm:text-[11px] tracking-[3px] uppercase">
-                <span>Checkout</span>
-                <span>•</span>
-                <span>{formatPrice(subtotal)}</span>
-              </div>
+              <span className="text-[11px] sm:text-[12px] tracking-[3px] uppercase font-semibold">
+                Checkout • {formatPrice(subtotal)}
+              </span>
             </Link>
           </div>
         </div>

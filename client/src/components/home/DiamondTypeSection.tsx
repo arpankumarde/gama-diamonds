@@ -4,11 +4,11 @@ import { diamondCollections } from "../../data/products";
 
 export default function DiamondTypeSection() {
   return (
-    <section className="bg-white py-12 md:py-16 px-4 md:px-8 lg:px-12 border-t border-brand-gold/10">
+    <section className="bg-white py-8 md:py-10 px-4 md:px-8 lg:px-12 border-t border-brand-gold/10">
       <div className="text-center mb-10 md:mb-16">
         <div className="flex items-center justify-center gap-4 mb-4">
           <span className="block w-10 h-[1px] bg-brand-gold/50"></span>
-          <p className="text-[10px] tracking-[4px] uppercase text-brand-gold/70">Premium Collections</p>
+          <p className="text-[13px] tracking-[3px] uppercase text-brand-gold/70">Premium Collections</p>
           <span className="block w-10 h-[1px] bg-brand-gold/50"></span>
         </div>
         

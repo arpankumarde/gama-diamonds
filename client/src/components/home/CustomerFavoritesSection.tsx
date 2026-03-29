@@ -17,14 +17,14 @@ export default function CustomerFavoritesSection() {
   } = useHomeContext();
 
   return (
-    <section className="bg-white py-12 md:py-20 px-4 md:px-8 lg:px-12 border-t border-brand-gold/10">
+    <section className="bg-white py-8 md:py-10 px-4 md:px-8 lg:px-12 border-t border-brand-gold/10">
       {/* Header */}
       <div className="text-center mb-12 md:mb-16">
         <div className="flex items-center justify-center gap-4 mb-4">
           <span className="block w-10 h-[1px] bg-brand-gold/50"></span>
           <div className="flex items-center gap-2">
             <Heart className="w-4 h-4 text-brand-gold/70" strokeWidth={1.5} />
-            <p className="text-[10px] tracking-[4px] uppercase text-brand-gold/70">Highly Rated</p>
+            <p className="text-[13px] tracking-[3px] uppercase text-brand-gold/70">Highly Rated</p>
           </div>
           <span className="block w-10 h-[1px] bg-brand-gold/50"></span>
         </div>
@@ -48,7 +48,7 @@ export default function CustomerFavoritesSection() {
         <button
           onClick={prevProducts}
           disabled={!canGoPrevProducts}
-          className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 hidden md:flex w-12 h-12 rounded-full items-center justify-center transition duration-300 ${
+          className={`absolute left-0 top-[40%] -translate-y-1/2 z-10 hidden md:flex w-12 h-12 rounded-full items-center justify-center transition duration-300 ${
             canGoPrevProducts
               ? "bg-white border border-brand-gold/20 text-brand-green shadow-[0_8px_24px_rgba(0,0,0,0.10)] hover:border-brand-gold/50 hover:shadow-[0_12px_32px_rgba(0,0,0,0.15)]"
               : "bg-gray-100 text-gray-400 cursor-not-allowed"
@@ -60,7 +60,7 @@ export default function CustomerFavoritesSection() {
         <button
           onClick={nextProducts}
           disabled={!canGoNextProducts}
-          className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 hidden md:flex w-12 h-12 rounded-full items-center justify-center transition duration-300 ${
+          className={`absolute right-0 top-[40%] -translate-y-1/2 z-10 hidden md:flex w-12 h-12 rounded-full items-center justify-center transition duration-300 ${
             canGoNextProducts
               ? "bg-white border border-brand-gold/20 text-brand-green shadow-[0_8px_24px_rgba(0,0,0,0.10)] hover:border-brand-gold/50 hover:shadow-[0_12px_32px_rgba(0,0,0,0.15)]"
               : "bg-gray-100 text-gray-400 cursor-not-allowed"
@@ -124,7 +124,7 @@ export default function CustomerFavoritesSection() {
       </div>
 
       {/* Bottom Accent */}
-      <div className="flex justify-center mt-12 md:mt-16">
+      <div className="flex justify-center mt-8 md:mt-10">
         <div className="w-20 h-[1px] bg-gradient-to-r from-transparent via-brand-gold to-transparent"></div>
       </div>
     </section>

@@ -10,7 +10,7 @@ export default function ConfidenceSection() {
     <section className="bg-white py-14 md:py-20 px-4 md:px-8 lg:px-12 border-t border-brand-gold/10">
       <div className="flex items-center justify-center gap-4 mb-4">
         <span className="block w-10 h-[1px] bg-brand-gold/50"></span>
-        <p className="text-[10px] tracking-[4px] uppercase text-brand-gold/70">Our Promise</p>
+        <p className="text-[13px] tracking-[3px] uppercase text-brand-gold/70">Our Promise</p>
         <span className="block w-10 h-[1px] bg-brand-gold/50"></span>
       </div>
 

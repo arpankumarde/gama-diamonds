@@ -22,28 +22,31 @@ export default function ProductInfoPanel() {
 
   return (
     <div className="pt-2 lg:pt-4 bg-white p-4 md:p-6 md:pr-6 lg:pr-12 xl:pr-16">
+      {/* Rating */}
       <div className="flex items-center gap-3 mb-4 md:mb-6">
-        <span className="text-[14px] md:text-[18px] font-semibold text-black">
-          Excellent
-        </span>
-        <span className="text-yellow-500 text-[14px] md:text-[18px]">★★★★★</span>
-        <span className="text-[12px] md:text-[14px] text-black">2269 Reviews</span>
+        <span className="text-[13px] md:text-[15px] font-semibold text-brand-green">Excellent</span>
+        <span className="text-brand-gold text-[14px] md:text-[16px]">★★★★★</span>
+        <span className="text-[12px] md:text-[13px] text-black/60">2269 Reviews</span>
       </div>
 
-      <h1 className="text-[16px] md:text-[20px] tracking-[3px] md:tracking-[5px] uppercase font-light leading-[1.6] md:leading-[2] text-black mb-4 md:mb-6">
+      {/* Title */}
+      <h1 className="text-[16px] md:text-[20px] tracking-[3px] md:tracking-[5px] uppercase font-light leading-[1.6] md:leading-[2] text-[#111] mb-4 md:mb-6">
         {product.title}
       </h1>
 
-      <p className="text-[12px] md:text-[14px] tracking-[2px] md:tracking-[3px] text-black mb-6 md:mb-8">
+      {/* SKU */}
+      <p className="text-[11px] md:text-[12px] tracking-[2px] md:tracking-[3px] text-brand-gold/70 mb-4 md:mb-6 uppercase">
         SKU: {product.id.slice(-6)}
       </p>
 
-      <p className="text-[28px] md:text-[34px] font-light text-black mb-6 md:mb-2">
-        ${totalPrice.toLocaleString("en-US", { minimumFractionDigits: 2 })} USD
+      {/* Price */}
+      <p className="text-[28px] md:text-[34px] font-light text-brand-green mb-4 md:mb-2">
+        ${totalPrice.toLocaleString("en-US", { minimumFractionDigits: 2 })} <span className="text-[16px] md:text-[18px] text-black/50">USD</span>
       </p>
 
-      <hr className="mb-6 md:mb-8 border-[#dddddd]" />
+      <hr className="mb-6 md:mb-8 border-brand-gold/20" />
 
+      {/* Diamond Type */}
       <div className="mb-6 md:mb-3">
         <LuxuryDropdown
           label="Diamond Type"
@@ -54,11 +57,12 @@ export default function ProductInfoPanel() {
         />
       </div>
 
-      <div className="border border-[#dddddd] p-4 md:p-6 mb-6 md:mb-10 bg-white">
+      {/* Size Selector */}
+      <div className="border border-brand-gold/20 rounded-xl p-4 md:p-6 mb-6 md:mb-10 bg-white shadow-[0_0_0_1px_rgba(211,160,42,0.05)]">
         <button
           type="button"
           onClick={openSizeGuide}
-          className="underline text-[13px] md:text-[14px] mb-4 md:mb-6 cursor-pointer hover:text-[#666] transition text-black"
+          className="text-[13px] md:text-[14px] mb-4 md:mb-6 cursor-pointer text-brand-gold hover:text-brand-green transition duration-300 underline underline-offset-4"
         >
           Size Guide
         </button>
@@ -72,20 +76,20 @@ export default function ProductInfoPanel() {
           className="mb-6 md:mb-8"
         />
         {sizeError && (
-          <p className="text-[13px] font-semibold tracking-[2px] text-black mt-2 h-[20px] flex items-center">
+          <p className="text-[13px] font-semibold tracking-[2px] text-red-500 mt-2 h-[20px] flex items-center">
             Please select finger size
           </p>
         )}
       </div>
 
+      {/* Add to Cart */}
       <button
         type="button"
         onClick={handleAddToCart}
-        className="w-full h-[52px] md:h-[58px] text-white tracking-[3px] md:tracking-[4px] uppercase text-[12px] md:text-[13px] transition bg-black hover:opacity-90"
+        className="w-full h-[52px] md:h-[58px] bg-brand-gold text-brand-green tracking-[3px] md:tracking-[4px] uppercase text-[12px] md:text-[13px] font-semibold rounded-xl hover:bg-brand-gold-soft hover:shadow-[0_8px_24px_rgba(211,160,42,0.30)] transition duration-300"
       >
         Add To Cart • ${totalPrice.toLocaleString("en-US", { minimumFractionDigits: 2 })} USD
       </button>
-
     </div>
   );
 }

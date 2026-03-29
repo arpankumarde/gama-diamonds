@@ -32,9 +32,9 @@ export default function FilterContent() {
             type="checkbox"
             checked={inStockOnly}
             onChange={(e) => setInStockOnly(e.target.checked)}
-            className="w-4 h-4 accent-[#1A1A1A]"
+            className="w-4 h-4 accent-brand-green"
           />
-          <span className="text-[13px] text-[#666666]">In Stock</span>
+          <span className="text-[13px] text-brand-gold/80 group-hover:text-brand-gold transition duration-200">In Stock</span>
         </label>
       </AccordionItem>
 
@@ -56,9 +56,9 @@ export default function FilterContent() {
                 type="checkbox"
                 checked={selectedDiamond.includes(option.value)}
                 onChange={() => toggleDiamond(option.value)}
-                className="w-4 h-4 accent-[#1A1A1A]"
+                className="w-4 h-4 accent-brand-green"
               />
-              <span className="text-[13px] text-[#666666]">{option.label}</span>
+              <span className="text-[13px] text-brand-gold/80 group-hover:text-brand-gold transition duration-200">{option.label}</span>
             </label>
           ))}
         </div>
@@ -84,9 +84,9 @@ export default function FilterContent() {
                 type="checkbox"
                 checked={selectedMetal.includes(metal)}
                 onChange={() => toggleMetal(metal)}
-                className="w-4 h-4 accent-[#1A1A1A]"
+                className="w-4 h-4 accent-brand-green"
               />
-              <span className="text-[13px] text-[#666666]">{metal}</span>
+              <span className="text-[13px] text-brand-gold/80 group-hover:text-brand-gold transition duration-200">{metal}</span>
             </label>
           ))}
         </div>
@@ -109,9 +109,9 @@ export default function FilterContent() {
                 type="checkbox"
                 checked={selectedStyle.includes(shape)}
                 onChange={() => toggleStyle(shape)}
-                className="w-4 h-4 accent-[#1A1A1A]"
+                className="w-4 h-4 accent-brand-green"
               />
-              <span className="text-[13px] text-[#666666]">{shape}</span>
+              <span className="text-[13px] text-brand-gold/80 group-hover:text-brand-gold transition duration-200">{shape}</span>
             </label>
           ))}
         </div>
@@ -122,36 +122,40 @@ export default function FilterContent() {
         isOpen={openAccordions.includes("price")}
         onToggle={() => toggleAccordion("price")}
       >
-        <div className="space-y-4">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex-1">
+        <div className="space-y-3">
+          <div className="flex flex-col gap-3">
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[12px] text-brand-gold/70 font-medium">$</span>
               <input
                 type="number"
-                placeholder="Min"
+                placeholder="Min Price"
                 value={minPrice}
                 onChange={(e) => handleMinPriceChange(e.target.value)}
-                className="w-full px-3 py-2.5 text-[13px] text-black border border-[#D1D1D1] rounded-[4px] focus:border-[#1A1A1A] outline-none"
+                className="w-full pl-7 pr-3 py-2.5 text-[13px] text-[#111] border border-brand-gold/20 rounded-lg focus:border-brand-gold outline-none transition duration-300 placeholder:text-black/30"
               />
             </div>
-            <span className="text-[#999999]">−</span>
-            <div className="flex-1">
+            <div className="flex items-center gap-2">
+              <div className="flex-1 h-[1px] bg-brand-gold/20"></div>
+              <span className="text-[11px] tracking-[1px] text-black/40 uppercase">to</span>
+              <div className="flex-1 h-[1px] bg-brand-gold/20"></div>
+            </div>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[12px] text-brand-gold/70 font-medium">$</span>
               <input
                 type="number"
-                placeholder="Max"
+                placeholder="Max Price"
                 value={maxPrice}
                 onChange={(e) => handleMaxPriceChange(e.target.value)}
-                className="w-full px-3 py-2.5 text-[13px] text-black border border-[#D1D1D1] rounded-[4px] focus:border-[#1A1A1A] outline-none"
+                className="w-full pl-7 pr-3 py-2.5 text-[13px] text-[#111] border border-brand-gold/20 rounded-lg focus:border-brand-gold outline-none transition duration-300 placeholder:text-black/30"
               />
             </div>
           </div>
-          <div className="flex justify-between">
-            <button
-              onClick={clearPriceFilter}
-              className="text-[12px] text-[#1A1A1A] underline hover:text-[#666666]"
-            >
-              Clear Price
-            </button>
-          </div>
+          <button
+            onClick={clearPriceFilter}
+            className="w-full text-[11px] tracking-[2px] uppercase text-brand-green border border-brand-gold/20 rounded-lg py-2 hover:bg-brand-green hover:text-white hover:border-brand-green transition duration-300"
+          >
+            Clear Price
+          </button>
         </div>
       </AccordionItem>
     </div>
