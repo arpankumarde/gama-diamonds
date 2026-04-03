@@ -9,7 +9,7 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import type { Product } from "@/lib/api";
 import { getAllProducts, getFilterOptions } from "@/lib/api";
 
@@ -83,6 +83,7 @@ export function ProductListingProvider({
   collection,
 }: ProductListingProviderProps) {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -90,10 +91,16 @@ export function ProductListingProvider({
   const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null);
   const [selectedMetal, setSelectedMetal] = useState<string[]>([]);
   const [selectedDiamond, setSelectedDiamond] = useState<string[]>([]);
-  const [selectedStyle, setSelectedStyle] = useState<string[]>([]);
+  const [selectedStyle, setSelectedStyle] = useState<string[]>(() => {
+    const shape = searchParams.get("shape");
+    return shape ? [shape] : [];
+  });
   const [inStockOnly, setInStockOnly] = useState(false);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const urlCollection = searchParams.get("collection") || "";
+  const urlSubCollection = searchParams.get("subCollection") || "";
+  const urlSearch = searchParams.get("search") || "";
   const [sortBy, setSortBy] = useState("newest");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [openAccordions, setOpenAccordions] = useState<string[]>(["price"]);
@@ -111,7 +118,15 @@ export function ProductListingProvider({
   const loadFilterOptions = useCallback(async () => {
     try {
       const response = await getFilterOptions();
-      setFilterOptions(response.data);
+      setFilterOptions({
+        colors: response.data.colors || [],
+        clarities: [],
+        cuts: [],
+        shapes: response.data.shapes || [],
+        metals: response.data.metals || [],
+        categories: response.data.categories || [],
+        priceRange: response.data.priceRange || { min: 0, max: 0 }
+      } as FilterOptions);
     } catch (err) {
       console.error("Failed to load filter options:", err);
     }
@@ -127,6 +142,9 @@ export function ProductListingProvider({
     
     if (category) filters.category = category;
     if (collection) filters.search = collection;
+    if (urlCollection) filters.collection = urlCollection;
+    if (urlSubCollection) filters.subCollection = urlSubCollection;
+    if (urlSearch) filters.search = urlSearch;
     
     if (minPrice && minPrice !== '') filters.minPrice = Number(minPrice);
     if (maxPrice && maxPrice !== '') filters.maxPrice = Number(maxPrice);
@@ -142,7 +160,7 @@ export function ProductListingProvider({
     }
     
     return filters;
-  }, [category, collection, minPrice, maxPrice, selectedDiamond, selectedMetal, selectedStyle]);
+  }, [category, collection, urlCollection, urlSubCollection, minPrice, maxPrice, selectedDiamond, selectedMetal, selectedStyle]);
 
   // Map sortBy to backend sort param
   const getSortParam = useMemo(() => {

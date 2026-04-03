@@ -23,29 +23,29 @@ export default function SortDropdown({
   const isOpen = mobile ? mobileSortOpen : desktopSortOpen;
   const dropdownRef = mobile ? mobileSortRef : desktopSortRef;
 
+  const buttonLabel = "SORT BY";
+
+  const buttonClassName = mobile
+    ? "flex items-center gap-1 px-1.5 py-1 bg-white border-[1.8px] border-brand-gold rounded-lg text-[9px] tracking-[0.5px] uppercase text-[#111] font-medium w-full justify-between hover:border-brand-gold transition duration-300 overflow-hidden"
+    : "flex items-center gap-1.5 px-2 py-1.5 bg-white border-[1.8px] border-brand-gold rounded-lg text-[10px] tracking-[0.5px] uppercase text-[#111] font-medium min-w-0 w-auto justify-between hover:border-brand-gold transition duration-300 whitespace-nowrap";
+
+  const menuClassName = mobile
+    ? "absolute top-full right-0 mt-1 w-[min(220px,calc(100vw-2rem))] bg-white border-2 border-brand-gold/50 rounded-lg shadow-[0_8px_24px_rgba(0,0,0,0.12)] z-50 overflow-hidden"
+    : "absolute top-full right-0 mt-1 w-full min-w-[220px] bg-white border-2 border-brand-gold/50 rounded-lg shadow-[0_8px_24px_rgba(0,0,0,0.12)] z-50 overflow-hidden";
+
   return (
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={mobile ? toggleMobileSort : toggleDesktopSort}
-        className={
-          mobile
-            ? "flex items-center gap-1.5 px-2 py-1.5 bg-white border-[1.8px] border-brand-gold rounded-lg text-[10px] tracking-[0.5px] uppercase text-[#111] font-medium min-w-0 w-auto justify-between hover:border-brand-gold transition duration-300 whitespace-nowrap"
-            : "flex items-center gap-1.5 px-2 py-1.5 bg-white border-[1.8px] border-brand-gold rounded-lg text-[10px] tracking-[0.5px] uppercase text-[#111] font-medium min-w-0 w-auto justify-between hover:border-brand-gold transition duration-300 whitespace-nowrap"
-        }
+        className={buttonClassName}
+        aria-haspopup="menu"
+        aria-expanded={isOpen}
       >
-        <span className={mobile ? "truncate" : ""}>
-          {sortOptions.find((o) => o.value === sortBy)?.label}
-        </span>
+        <span className={mobile ? "truncate" : ""}>{buttonLabel}</span>
         <ChevronDown size={14} className="text-brand-gold flex-shrink-0" />
       </button>
       {isOpen && (
-        <div
-          className={
-            mobile
-              ? "absolute top-full right-0 mt-1 w-full min-w-[200px] bg-white border-2 border-brand-gold/50 rounded-lg shadow-[0_8px_24px_rgba(0,0,0,0.12)] z-50 overflow-hidden"
-              : "absolute top-full right-0 mt-1 w-full min-w-[220px] bg-white border-2 border-brand-gold/50 rounded-lg shadow-[0_8px_24px_rgba(0,0,0,0.12)] z-50 overflow-hidden"
-          }
-        >
+        <div className={menuClassName}>
           {sortOptions.map((option) => (
             <button
               key={option.value}

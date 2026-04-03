@@ -1,5 +1,13 @@
 import mongoose, { Schema } from "mongoose";
 
+const SubCollectionSchema = new Schema(
+  {
+    name: { type: String, required: true, trim: true },
+    slug: { type: String, required: true, lowercase: true, trim: true },
+  },
+  { _id: true }
+);
+
 const CollectionSchema = new Schema(
   {
     name: { type: String, required: true, trim: true },
@@ -9,6 +17,7 @@ const CollectionSchema = new Schema(
     categories: [{ type: Schema.Types.ObjectId, ref: "Category" }],
     image: { type: String },
     products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+    subCollections: [SubCollectionSchema],
     isActive: { type: Boolean, default: true },
     sortOrder: { type: Number, default: 0 }
   },

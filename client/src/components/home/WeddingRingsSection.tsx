@@ -10,7 +10,7 @@ export default function WeddingRingsSection() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-[1400px] mx-auto">
         <div className="relative overflow-hidden rounded-2xl group border border-brand-gold/15 shadow-[0_16px_40px_rgba(0,0,0,0.45)]">
           <img
-            src="/images/menswedding.webp"
+            src="https://heeradiamonds.com/cdn/shop/files/mens_wedding_ring_3_750x832_crop_center.jpg?v=1741985876&quot;"
             alt="Men's Wedding Rings"
             className="w-full h-[400px] md:h-[480px] lg:h-[550px] object-cover transition-transform duration-[3000ms] ease-out group-hover:scale-110"
           />
@@ -25,7 +25,7 @@ export default function WeddingRingsSection() {
 
         <div className="relative overflow-hidden rounded-2xl group border border-brand-gold/15 shadow-[0_16px_40px_rgba(0,0,0,0.45)]">
           <img
-            src="/images/womenswedding.webp"
+            src="https://heeradiamonds.com/cdn/shop/files/ETERNITY_RINGS_ON_HAND_3_750x832_crop_center.jpg?v=1741996951&quot;"
             alt="Women's Wedding Rings"
             className="w-full h-[400px] md:h-[480px] lg:h-[550px] object-cover transition-transform duration-[3000ms] ease-out group-hover:scale-110"
           />

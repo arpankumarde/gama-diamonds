@@ -64,4 +64,7 @@ connectToDatabase().then(() => {
   process.on("SIGTERM", () => {
     server.close(() => process.exit(0));
   });
+}).catch((error) => {
+  console.error("Failed to connect to MongoDB:", error);
+  process.exit(1);
 });

@@ -3,8 +3,10 @@ import escapeStringRegexp from "escape-string-regexp";
 import Product from "../models/product";
 import Category from "../models/category";
 
-const generateSlug = (name: string) =>
-  name.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-");
+const generateSlug = (name: string) => {
+  const base = name.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-");
+  return `${base}-${Date.now()}`;
+};
 
 // Get all products with filters and pagination
 export const getAllProducts = async (req: Request, res: Response) => {
@@ -56,14 +58,31 @@ export const getAllProducts = async (req: Request, res: Response) => {
       const types = String(diamondType).split(',').map(s => s.trim()).filter(Boolean);
       filter.diamondType = types.length === 1 ? types[0] : { $in: types };
     }
-    if (search) {
+
+    // Map diamond collection slugs to diamondType filter
+    const diamondTypeMap: Record<string, string> = {
+      "lab-diamond-engagement-rings": "Lab Diamond Engagement Rings",
+      "emerald-cut": "Emerald Cut",
+      "coloured-diamonds": "Coloured Diamonds",
+      "real-diamonds-engagement-rings": "Real Diamonds Engagement Rings"
+    };
+    if (search && diamondTypeMap[String(search)]) {
+      filter.diamondType = diamondTypeMap[String(search)];
+    } else if (search) {
       const safeSearch = escapeStringRegexp(String(search));
+      const lowerSearch = String(search).toLowerCase();
       filter.$or = [
         { name: { $regex: safeSearch, $options: "i" } },
         { description: { $regex: safeSearch, $options: "i" } },
-        { tags: { $in: [safeSearch] } }
+        { shape: { $regex: safeSearch, $options: "i" } },
+        { color: { $regex: safeSearch, $options: "i" } },
+        { metal: { $regex: safeSearch, $options: "i" } },
+        { diamondType: { $regex: safeSearch, $options: "i" } },
+        { subCollection: { $regex: safeSearch, $options: "i" } },
+        { tags: lowerSearch }
       ];
     }
+    if (req.query.subCollection) filter.subCollection = req.query.subCollection;
 
     const skip = (Number(page) - 1) * Number(limit);
     const products = await Product.find(filter)
@@ -127,9 +146,9 @@ export const getProductById = async (req: Request, res: Response) => {
 // Create new product (Admin)
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const { name, price, sku, category, description, images, stock, carat, color, shape, metal, salePrice, tags, video, diamondType, isActive } = req.body;
+    const { name, price, sku, category, collectionRef, subCollection, description, images, stock, carat, color, shape, metal, salePrice, tags, video, diamondType, isActive } = req.body;
     const slug = generateSlug(name);
-    const product = await Product.create({ name, slug, price, sku, category, description, images, stock, carat, color, shape, metal, salePrice, tags, video, diamondType, isActive });
+    const product = await Product.create({ name, slug, price, sku, category, collectionRef, subCollection, description, images, stock, carat, color, shape, metal, salePrice, tags, video, diamondType, isActive });
     res.status(201).json({ success: true, data: product });
   } catch (error) {
     const msg = error instanceof Error ? error.message : "Internal server error";
@@ -137,13 +156,12 @@ export const createProduct = async (req: Request, res: Response) => {
   }
 };
 
-// Update product (Admin)
 export const updateProduct = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { name, price, sku, category, description, images, stock, carat, color, shape, metal, salePrice, tags, video, diamondType, isActive } = req.body;
+    const { name, price, sku, category, collectionRef, subCollection, description, images, stock, carat, color, shape, metal, salePrice, tags, video, diamondType, isActive } = req.body;
 
-    const update: any = { name, price, sku, category, description, images, stock, carat, color, shape, metal, salePrice, tags, diamondType, isActive };
+    const update: any = { name, price, sku, category, collectionRef, subCollection, description, images, stock, carat, color, shape, metal, salePrice, tags, diamondType, isActive };
     if (video !== undefined) update.video = video;
 
     // Remove undefined keys so existing DB values are not overwritten

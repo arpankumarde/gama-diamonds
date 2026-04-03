@@ -5,9 +5,10 @@ import { cn } from "@/lib/utils";
 
 type AdminSidebarProps = {
   onNavigate?: () => void;
+  onLogout?: () => void | Promise<void>;
 };
 
-export default function AdminSidebar({ onNavigate }: AdminSidebarProps) {
+export default function AdminSidebar({ onNavigate, onLogout }: AdminSidebarProps) {
   return (
     <aside className="flex h-full w-full flex-col bg-white text-black">
       <div className="border-b border-gray-200 px-4 py-6">
@@ -52,11 +53,14 @@ export default function AdminSidebar({ onNavigate }: AdminSidebarProps) {
             </NavLink>
           );
         })}
-        <NavLink
-          to="/admin/login"
-          onClick={() => {
-            localStorage.removeItem("adminAuth");
-            onNavigate?.();
+        <button
+          type="button"
+          onClick={async () => {
+            try {
+              await onLogout?.();
+            } finally {
+              onNavigate?.();
+            }
           }}
           className="group flex items-center gap-3 rounded-lg border px-4 py-3 text-sm font-medium uppercase transition-colors border-transparent text-red-600 hover:border-red-200 hover:bg-red-50 hover:text-red-600"
         >
@@ -64,7 +68,7 @@ export default function AdminSidebar({ onNavigate }: AdminSidebarProps) {
             <span className="h-4 w-4 font-bold">←</span>
           </span>
           <span>Logout</span>
-        </NavLink>
+        </button>
       </nav>
     </aside>
   );

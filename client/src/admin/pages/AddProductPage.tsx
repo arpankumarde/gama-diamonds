@@ -21,11 +21,11 @@ const EMPTY_IMAGES = ["", "", ""];
 const COLOR_OPTIONS = ["D", "E", "F", "G", "H", "I", "J", "K", "L", "M"];
 const SHAPE_OPTIONS = ["Round", "Princess", "Solitaire", "Cushion", "Three Stone", "Halo", "Emerald", "Oval", "Radiant", "Asscher", "Marquise", "Heart", "Pear", "Elongated Cushion", "Trillion", "Baguette", "Rose Cut"];
 const METAL_OPTIONS = ["9K White Gold", "9K Yellow Gold", "9K Rose Gold", "18K Rose Gold", "18K White Gold", "18K Yellow Gold", "Platinum"];
-const DIAMOND_TYPE_OPTIONS = ["Lab Diamond", "Natural Diamond"];
+const DIAMOND_TYPE_OPTIONS = ["Lab Diamond", "Natural Diamond", "Lab Diamond Engagement Rings", "Emerald Cut", "Coloured Diamonds", "Real Diamonds Engagement Rings"];
 
 export default function AddProductPage() {
   const navigate = useNavigate();
-  const { categories, addProduct } = useAdminData();
+  const { categories, collections, addProduct } = useAdminData();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -35,6 +35,7 @@ export default function AddProductPage() {
     salePrice: "",
     stock: "",
     category: "",
+    collection: "",
     carat: "",
     color: "",
     shape: "",
@@ -43,6 +44,7 @@ export default function AddProductPage() {
     tags: "",
     video: "",
   });
+
   const [videoName, setVideoName] = useState("");
   const [images, setImages] = useState<string[]>(EMPTY_IMAGES);
   const [imageNames, setImageNames] = useState<string[]>(EMPTY_IMAGES);
@@ -121,6 +123,7 @@ export default function AddProductPage() {
         price: Number(formData.price),
         salePrice: Number(formData.salePrice) || undefined,
         category: formData.category || undefined,
+        collectionRef: formData.collection && formData.collection !== "none" ? formData.collection : undefined,
         images: images.filter(Boolean),
         stock: Number(formData.stock) || 0,
         carat: Number(formData.carat) || undefined,
@@ -131,7 +134,7 @@ export default function AddProductPage() {
           ? formData.tags.split(",").map((t) => t.trim().toLowerCase()).filter(Boolean)
           : [],
         video: formData.video || undefined,
-        diamondType: (formData.diamondType as "Lab Diamond" | "Natural Diamond") || undefined,
+        diamondType: (formData.diamondType as "Lab Diamond" | "Natural Diamond" | "Lab Diamond Engagement Rings" | "Emerald Cut" | "Coloured Diamonds" | "Real Diamonds Engagement Rings") || undefined,
       };
 
       await addProduct(payload);
@@ -268,11 +271,24 @@ export default function AddProductPage() {
               <SelectTrigger className="h-11 rounded-md border-gray-300 bg-white text-black">
                 <SelectValue placeholder="Choose category" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-h-[220px] overflow-y-auto" position="popper">
                 {categories.map((cat) => (
-                  <SelectItem key={cat._id} value={cat._id}>
-                    {cat.name}
-                  </SelectItem>
+                  <SelectItem key={cat._id} value={cat._id}>{cat.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-black">Collection (Optional)</Label>
+            <Select value={formData.collection} onValueChange={(v) => setField("collection", v)}>
+              <SelectTrigger className="h-11 rounded-md border-gray-300 bg-white text-black">
+                <SelectValue placeholder="Choose collection (optional)" />
+              </SelectTrigger>
+              <SelectContent className="max-h-[220px] overflow-y-auto" position="popper">
+                <SelectItem value="none">No Collection</SelectItem>
+                {collections.map((col) => (
+                  <SelectItem key={col._id} value={col._id}>{col.name}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -284,7 +300,7 @@ export default function AddProductPage() {
               <SelectTrigger className="h-11 rounded-md border-gray-300 bg-white text-black">
                 <SelectValue placeholder="Choose color grade" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-h-[220px] overflow-y-auto" position="popper">
                 {COLOR_OPTIONS.map((opt) => (
                   <SelectItem key={opt} value={opt}>{opt}</SelectItem>
                 ))}
@@ -298,7 +314,7 @@ export default function AddProductPage() {
               <SelectTrigger className="h-11 rounded-md border-gray-300 bg-white text-black">
                 <SelectValue placeholder="Choose shape" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-h-[220px] overflow-y-auto" position="popper">
                 {SHAPE_OPTIONS.map((opt) => (
                   <SelectItem key={opt} value={opt}>{opt}</SelectItem>
                 ))}
@@ -312,7 +328,7 @@ export default function AddProductPage() {
               <SelectTrigger className="h-11 rounded-md border-gray-300 bg-white text-black">
                 <SelectValue placeholder="Choose metal" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-h-[220px] overflow-y-auto" position="popper">
                 {METAL_OPTIONS.map((opt) => (
                   <SelectItem key={opt} value={opt}>{opt}</SelectItem>
                 ))}
@@ -326,7 +342,7 @@ export default function AddProductPage() {
               <SelectTrigger className="h-11 rounded-md border-gray-300 bg-white text-black">
                 <SelectValue placeholder="Choose diamond type" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-h-[220px] overflow-y-auto" position="popper">
                 {DIAMOND_TYPE_OPTIONS.map((opt) => (
                   <SelectItem key={opt} value={opt}>{opt}</SelectItem>
                 ))}

@@ -30,7 +30,7 @@ export default function StorySection() {
             <div className="order-1 md:order-2">
               <div className="group overflow-hidden">
                 <img
-                  src="/images/eternityring2.webp"
+                  src="https://heeradiamonds.com/cdn/shop/files/ETERNITY_RINGS_ON_HAND_2_1200x.jpg?v=1741996951"
                   alt="Luxury ring"
                   className="w-full h-[300px] md:h-[380px] lg:h-[450px] object-cover transition-transform duration-[1800ms] ease-out group-hover:scale-[1.05]"
                 />

@@ -2,14 +2,12 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
 import { useCart } from "@/components/cart/cart-context";
-
-function formatPrice(price: number) {
-  return `$${price.toLocaleString("en-US", { minimumFractionDigits: 2 })} USD`;
-}
+import { useCurrency } from "@/contexts/storefront/CurrencyContext";
 
 export default function CartPage() {
   const [orderNote, setOrderNote] = useState("");
   const { items, subtotal, updateQuantity, removeItem } = useCart();
+  const { formatPriceFromUSD } = useCurrency();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -98,7 +96,7 @@ export default function CartPage() {
                           )}
                         </div>
                         <p className="mt-4 md:mt-5 text-[15px] md:text-[18px] tracking-[2px] md:tracking-[3px] font-medium text-brand-green">
-                          {formatPrice(item.price)}
+                          {formatPriceFromUSD(item.price)}
                         </p>
 
                         {/* Mobile Quantity Controls */}
@@ -183,7 +181,7 @@ export default function CartPage() {
                   {/* Item Total */}
                   <div className="text-left md:text-right">
                     <p className="text-[16px] md:text-[18px] tracking-[3px] md:tracking-[4px] font-medium text-brand-green">
-                      {formatPrice(item.price * item.quantity)}
+                      {formatPriceFromUSD(item.price * item.quantity)}
                     </p>
                   </div>
                 </div>
@@ -221,7 +219,7 @@ export default function CartPage() {
                 <div className="space-y-4 mb-6 md:mb-8">
                   <div className="flex justify-between items-center">
                     <span className="text-[13px] md:text-[14px] text-black/60">Subtotal ({items.length} {items.length === 1 ? 'item' : 'items'})</span>
-                    <span className="text-[14px] md:text-[15px] font-medium text-[#111]">{formatPrice(subtotal)}</span>
+                    <span className="text-[14px] md:text-[15px] font-medium text-[#111]">{formatPriceFromUSD(subtotal)}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-[13px] md:text-[14px] text-black/60">Shipping</span>
@@ -236,7 +234,7 @@ export default function CartPage() {
                 <div className="border-t border-brand-gold/20 pt-4 mb-6 md:mb-8">
                   <div className="flex justify-between items-center">
                     <span className="text-[16px] md:text-[18px] tracking-[3px] uppercase font-medium text-brand-green">Total</span>
-                    <span className="text-[18px] md:text-[20px] tracking-[3px] font-semibold text-brand-green">{formatPrice(subtotal)}</span>
+                    <span className="text-[18px] md:text-[20px] tracking-[3px] font-semibold text-brand-green">{formatPriceFromUSD(subtotal)}</span>
                   </div>
                 </div>
                 

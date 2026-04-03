@@ -2,10 +2,7 @@ import { Link } from "react-router";
 import { Minus, Plus, X } from "lucide-react";
 import { useCart } from "./cart-context";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-
-function formatPrice(price: number) {
-  return `$${price.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
-}
+import { useCurrency } from "@/contexts/storefront/CurrencyContext";
 
 export default function CartDrawer() {
   const {
@@ -17,6 +14,7 @@ export default function CartDrawer() {
     updateQuantity,
     removeItem,
   } = useCart();
+  const { formatPriceFromUSD } = useCurrency();
 
   const handleDrawerNavigation = () => {
     closeCart();
@@ -94,7 +92,7 @@ export default function CartDrawer() {
                       </div>
 
                       <p className="mt-2 text-[13px] sm:text-[14px] font-medium text-brand-green">
-                        {formatPrice(item.price)}
+                        {formatPriceFromUSD(item.price)}
                       </p>
 
                       <div className="flex items-center justify-between mt-3 flex-wrap gap-2">
@@ -136,7 +134,7 @@ export default function CartDrawer() {
           <div className="border-t border-brand-gold/15 px-4 py-6 sm:px-6 bg-white">
             <div className="flex justify-between items-center mb-3">
               <span className="text-[12px] tracking-[2px] uppercase text-black/50">Subtotal</span>
-              <span className="text-[15px] font-semibold text-brand-green">{formatPrice(subtotal)}</span>
+              <span className="text-[15px] font-semibold text-brand-green">{formatPriceFromUSD(subtotal)}</span>
             </div>
             <p className="mb-5 text-[11px] text-black/40 tracking-[1px]">Shipping & taxes calculated at checkout</p>
 
@@ -146,7 +144,7 @@ export default function CartDrawer() {
               className="flex h-[52px] items-center justify-center bg-brand-gold text-brand-green rounded-lg hover:bg-brand-gold-soft hover:shadow-[0_8px_24px_rgba(211,160,42,0.25)] transition duration-300 w-full"
             >
               <span className="text-[11px] sm:text-[12px] tracking-[3px] uppercase font-semibold">
-                Checkout • {formatPrice(subtotal)}
+                Checkout • {formatPriceFromUSD(subtotal)}
               </span>
             </Link>
           </div>

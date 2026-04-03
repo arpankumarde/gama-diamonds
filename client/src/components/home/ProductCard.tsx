@@ -1,9 +1,10 @@
 import { Heart } from "lucide-react";
+import { useCurrency } from "@/contexts/storefront/CurrencyContext";
 
 type ProductCardProps = {
   image: string;
   title: string;
-  price: string;
+  price: number;
 };
 
 export default function ProductCard({
@@ -11,6 +12,7 @@ export default function ProductCard({
   title,
   price,
 }: ProductCardProps) {
+  const { formatPriceFromUSD } = useCurrency();
   return (
     <div className="group text-center">
       <div className="relative overflow-hidden rounded-2xl border border-brand-gold/15 bg-white shadow-[0_0_0_1px_rgba(211,160,42,0.08),0_16px_40px_rgba(0,0,0,0.10)] transition duration-500 group-hover:border-brand-gold/50 group-hover:shadow-[0_0_0_1px_rgba(211,160,42,0.20),0_20px_48px_rgba(0,0,0,0.15)]">
@@ -41,7 +43,7 @@ export default function ProductCard({
         </p>
 
         <p className="mt-2 md:mt-3 text-[15px] md:text-[16px] font-semibold text-brand-gold group-hover:text-[#111] transition duration-300">
-          {price}
+          {formatPriceFromUSD(price)}
         </p>
         
         {/* Decorative underline - always visible */}

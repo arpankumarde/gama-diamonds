@@ -160,3 +160,39 @@ export const deleteCollection = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const addSubCollection = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+    if (!name) return res.status(400).json({ success: false, message: "name is required" });
+
+    const slug = generateSlug(name);
+    const collection = await Collection.findByIdAndUpdate(
+      id,
+      { $push: { subCollections: { name, slug } } },
+      { new: true }
+    );
+    if (!collection) return res.status(404).json({ success: false, message: "Collection not found" });
+
+    res.status(201).json({ success: true, data: collection });
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const deleteSubCollection = async (req: Request, res: Response) => {
+  try {
+    const { id, subId } = req.params;
+    const collection = await Collection.findByIdAndUpdate(
+      id,
+      { $pull: { subCollections: { _id: subId } } },
+      { new: true }
+    );
+    if (!collection) return res.status(404).json({ success: false, message: "Collection not found" });
+
+    res.status(200).json({ success: true, data: collection });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

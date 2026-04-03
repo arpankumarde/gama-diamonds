@@ -1,8 +1,10 @@
 import { useProductListingContext } from "@/contexts/storefront/ProductListingContext";
+import { useCurrency } from "@/contexts/storefront/CurrencyContext";
 import { Link } from "react-router";
 
 export default function ProductGrid() {
   const { products: sortedProducts, isLoading } = useProductListingContext();
+  const { formatPriceFromUSD } = useCurrency();
 
   if (isLoading) {
     return <div>Loading products...</div>;
@@ -34,7 +36,7 @@ export default function ProductGrid() {
               {item.description}
             </p>
             <p className="text-[15px] md:text-[17px] font-semibold text-brand-gold group-hover:text-[#111] transition duration-300">
-              ${item.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+              {formatPriceFromUSD(item.price)}
             </p>
             <div className="w-0 h-[1px] bg-brand-gold mx-auto mt-2 group-hover:w-8 transition-all duration-500"></div>
           </div>

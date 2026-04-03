@@ -11,7 +11,7 @@ export default function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { isAuthenticated, loading } = useAdminAuth();
+  const { isAuthenticated, loading, logout } = useAdminAuth();
 
   useLayoutEffect(() => {
     const previous = window.history.scrollRestoration;
@@ -40,7 +40,7 @@ export default function AdminLayout() {
         <div className="mx-auto flex min-h-screen max-w-[1800px]">
           <div className="hidden w-[280px] shrink-0 border-r border-gray-200 lg:block">
             <div className="sticky top-0 h-screen w-[280px]">
-              <AdminSidebar />
+              <AdminSidebar onLogout={logout} />
             </div>
           </div>
 
@@ -50,7 +50,7 @@ export default function AdminLayout() {
               showCloseButton={false}
               className="w-[280px] border-r-0 bg-white p-0 shadow-none"
             >
-              <AdminSidebar onNavigate={() => setMobileOpen(false)} />
+              <AdminSidebar onNavigate={() => setMobileOpen(false)} onLogout={logout} />
             </SheetContent>
           </Sheet>
 
