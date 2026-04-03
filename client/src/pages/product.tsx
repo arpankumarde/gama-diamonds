@@ -70,7 +70,7 @@ function ProductContent() {
           <div className="hidden lg:flex justify-end w-[100px]">
             <SortDropdown />
           </div>
-          <div className="lg:hidden flex justify-end w-[100px]">
+          <div className="lg:hidden flex justify-end w-[88px] sm:w-[100px] flex-shrink-0">
             <SortDropdown mobile />
           </div>
         </div>

@@ -89,9 +89,9 @@ export async function login(req: Request<{}, {}, LoginBody>, res: Response) {
     if (!isPasswordValid) {
       user.loginAttempts += 1;
       if (user.loginAttempts >= 5) {
-        user.lockUntil = new Date(Date.now() + 15 * 60 * 1000); // lock 15 mins
+        user.lockUntil = new Date(Date.now() + 15 * 60 * 1000);
       }
-      await user.save();
+      await user.save({ validateBeforeSave: false });
       return res.status(401).json({ success: false, message: "Invalid email or password" });
     }
 
@@ -99,7 +99,7 @@ export async function login(req: Request<{}, {}, LoginBody>, res: Response) {
     user.loginAttempts = 0;
     user.lockUntil = null;
     user.lastLogin = new Date();
-    await user.save();
+    await user.save({ validateBeforeSave: false });
 
     const token = signToken(user._id.toString(), user.role);
 

@@ -123,6 +123,8 @@ function mapBackendProduct(product: any): ProductItem {
     tags: product.tags || [],
     video: product.video,
     diamondType: product.diamondType,
+    collectionRef: product.collectionRef,
+    subCollection: product.subCollection,
     isActive: product.isActive !== false,
     createdAt: product.createdAt,
     updatedAt: product.updatedAt,
@@ -173,6 +175,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
               name: c.name,
               curator: c.curator ?? "",
               products: Array.isArray(c.products) ? c.products.length : 0,
+              subCollections: Array.isArray(c.subCollections) ? c.subCollections : [],
             })),
           }),
         }));
@@ -232,6 +235,8 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
             ...(input.tags?.length && { tags: input.tags }),
             ...(input.video && { video: input.video }),
             ...(input.diamondType && { diamondType: input.diamondType }),
+            ...(input.collectionRef && { collectionRef: input.collectionRef }),
+            ...(input.subCollection && { subCollection: input.subCollection }),
           };
 
           const response = await createProduct(payload);
@@ -266,6 +271,8 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
             ...(input.tags && { tags: input.tags }),
             ...(input.video && { video: input.video }),
             ...(input.diamondType && { diamondType: input.diamondType }),
+            ...(input.collectionRef && { collectionRef: input.collectionRef }),
+            ...(input.subCollection && { subCollection: input.subCollection }),
           };
           const response = await updateProductAPI(id, payload);
           if (response.success) {

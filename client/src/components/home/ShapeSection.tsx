@@ -12,7 +12,7 @@ export default function ShapeSection() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 md:gap-6 max-w-[1500px] mx-auto">
         {shapeItems.map((item) => (
-          <ShapeCard key={item.title} image={item.image} title={item.title} />
+          <ShapeCard key={item.title} image={item.image} title={item.title} slug={item.slug} />
         ))}
       </div>
     </section>

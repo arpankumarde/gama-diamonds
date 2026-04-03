@@ -20,6 +20,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useCart } from "@/components/cart/cart-context";
 import { useUser } from "@/contexts/user-context";
+import { supportedCurrencies, useCurrency } from "@/contexts/storefront/CurrencyContext";
 
 const menuItems = [
   "ENGAGEMENT RINGS",
@@ -33,47 +34,126 @@ const menuItems = [
   "JEWELLERY CREATOR",
 ];
 
-// Mobile menu data with nested items
-const mobileMenuData: Record<string, {
-  sections: { title: string; items: string[] | Record<string, string[]> }[];
-}> = {
+// Mega Menu Data (used for desktop mega menu and mobile sidebar navigation)
+const megaMenuData: Record<
+  string,
+  {
+    columns: {
+      title: string;
+      items: {
+        label: string;
+        shape: string;
+        collectionId?: string;
+        subCollection?: string;
+      }[];
+    }[];
+    images: { src: string; label: string; shape: string }[];
+  }
+> = {
   "ENGAGEMENT RINGS": {
-    sections: [
+    columns: [
       {
         title: "All Engagement Rings",
-        items: ["Create Your Own", "Find Your Ring Size"],
+        items: [{ label: "Create Your Own", shape: "" }],
       },
       {
         title: "Shop By Shape",
-        items: {
-          "Round Brilliant": ["Round Brilliant Solitaire", "Round Brilliant Halo"],
-          "Princess": ["Princess Cut Solitaire", "Princess Cut Halo"],
-          "Cushion": ["Cushion Cut Solitaire", "Cushion Cut Halo"],
-          "Oval": ["Oval Cut Solitaire", "Oval Cut Halo"],
-        },
+        items: [
+          { label: "Asscher", shape: "Asscher" },
+          { label: "Heart", shape: "Heart" },
+          { label: "Elongated Cushion", shape: "Elongated Cushion" },
+          { label: "Trillion", shape: "Trillion" },
+          { label: "Baguette", shape: "Baguette" },
+          { label: "Rose Cut", shape: "Rose Cut" },
+        ],
       },
       {
         title: "Shop By Style",
-        items: ["Solitaire", "Halo", "Under Halo", "Diamond Shoulder", "Three Stone"],
+        items: [
+          { label: "Solitaire", shape: "Solitaire" },
+          { label: "Halo", shape: "Halo" },
+          { label: "Three Stone", shape: "Three Stone" },
+        ],
       },
+    ],
+    images: [
+      { src: "/images/roundbriliant.webp", label: "Round Brilliant", shape: "Round" },
+      { src: "/images/cusioncut.webp", label: "Cushion Halo", shape: "Cushion" },
     ],
   },
   "WEDDING RINGS": {
-    sections: [
+    columns: [
       {
         title: "Women Collection",
-        items: ["Women's Plain", "Women's Diamond", "Eternity Rings"],
+        items: [
+          {
+            label: "Women's Plain",
+            shape: "",
+            collectionId: "69ca34030ac03a3986e3c86a",
+            subCollection: "women plain",
+          },
+          {
+            label: "Women's Diamond",
+            shape: "",
+            collectionId: "69ca34030ac03a3986e3c86a",
+            subCollection: "women diamond",
+          },
+          {
+            label: "Eternity Rings",
+            shape: "",
+            collectionId: "69ca34030ac03a3986e3c86a",
+            subCollection: "eternity rings",
+          },
+        ],
       },
       {
         title: "Men's Collection",
-        items: ["Men's Plain", "Men's Diamond", "Men's Pattern"],
+        items: [
+          {
+            label: "Men's Plain",
+            shape: "",
+            collectionId: "69ca33800ac03a3986e3c835",
+            subCollection: "mens plain",
+          },
+          {
+            label: "Men's Diamond",
+            shape: "",
+            collectionId: "69ca33800ac03a3986e3c835",
+            subCollection: "mens diamond",
+          },
+          {
+            label: "Men's Pattern",
+            shape: "",
+            collectionId: "69ca33800ac03a3986e3c835",
+            subCollection: "mens pattern",
+          },
+        ],
       },
       {
         title: "Shop By Style",
-        items: ["Traditional Court", "Flat Court", "Soft Court"],
+        items: [
+          { label: "Oval", shape: "Oval" },
+          { label: "Pear", shape: "Pear" },
+          { label: "Marquise", shape: "Marquise" },
+          { label: "Radiant", shape: "Radiant" },
+          { label: "Emerald", shape: "Emerald" },
+        ],
       },
     ],
+    images: [
+      { src: "/images/womenswedding.webp", label: "Women's Rings", shape: "" },
+      { src: "/images/menswedding.webp", label: "Men's Rings", shape: "" },
+    ],
   },
+};
+
+// Mobile-only menu data with nested items
+const mobileMenuData: Record<
+  string,
+  {
+    sections: { title: string; items: string[] | Record<string, string[]> }[];
+  }
+> = {
   "JEWELLERY": {
     sections: [
       {
@@ -100,23 +180,51 @@ const socialIcons: { icon: LucideIcon; label: string; href: string }[] = [
   { icon: Youtube, label: "YouTube", href: "#" },
 ];
 
-// Country and Currency options - USD only
-const countries = [
-  { name: "United States", code: "US", currency: "USD", symbol: "$" },
-];
-
 // Mobile Menu Component
 function MobileMenu() {
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
+  const { currency, setCurrency } = useCurrency();
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [activeSubSection, setActiveSubSection] = useState<string | null>(null);
-  const [selectedCountry, setSelectedCountry] = useState(countries[0]);
-  const [countryDropdownOpen, setCountryDropdownOpen] = useState(false);
+  const [currencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
 
   if (!isMobile) return null;
 
-  const expandableItems = ["ENGAGEMENT RINGS", "WEDDING RINGS", "JEWELLERY"];
+  const expandableItems = [
+    ...Object.keys(megaMenuData),
+    ...Object.keys(mobileMenuData),
+  ];
+
+  const closeMenu = () => {
+    setActiveSection(null);
+    setActiveSubSection(null);
+    setCurrencyDropdownOpen(false);
+    setOpen(false);
+  };
+
+  const navigateToShape = (shape: string) => {
+    closeMenu();
+    if (shape) {
+      navigate(`/products?shape=${encodeURIComponent(shape)}`);
+    } else {
+      navigate("/products");
+    }
+  };
+
+  const navigateToCollection = (subCollectionName?: string) => {
+    closeMenu();
+    const params = new URLSearchParams();
+    if (subCollectionName) params.set("subCollection", subCollectionName);
+    const query = params.toString();
+    navigate(query ? `/products?${query}` : "/products");
+  };
+
+  const navigateToSearch = (term: string) => {
+    closeMenu();
+    navigate(`/products?search=${encodeURIComponent(term)}`);
+  };
 
   const handleMenuClick = (item: string) => {
     if (expandableItems.includes(item)) {
@@ -138,11 +246,14 @@ function MobileMenu() {
       return (
         <ul className="ml-4 mt-3 space-y-3">
           {items.map((item) => (
-            <li 
-              key={item} 
-              className="text-[11px] tracking-[2px] uppercase text-white/70 cursor-pointer hover:text-brand-gold transition"
-            >
-              {item}
+            <li key={item}>
+              <button
+                type="button"
+                onClick={() => navigateToSearch(item)}
+                className="text-[11px] tracking-[2px] uppercase text-white/70 hover:text-brand-gold transition text-left"
+              >
+                {item}
+              </button>
             </li>
           ))}
         </ul>
@@ -169,11 +280,14 @@ function MobileMenu() {
               {activeSubSection === key && (
                 <ul className="ml-4 mt-2 space-y-2 border-l border-white/15 pl-3">
                   {value.map((subItem) => (
-                    <li 
-                      key={subItem} 
-                      className="text-[10px] tracking-[1.5px] uppercase text-white/60 cursor-pointer hover:text-brand-gold transition"
-                    >
-                      {subItem}
+                    <li key={subItem}>
+                      <button
+                        type="button"
+                        onClick={() => navigateToSearch(subItem)}
+                        className="text-[10px] tracking-[1.5px] uppercase text-white/60 hover:text-brand-gold transition text-left"
+                      >
+                        {subItem}
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -237,16 +351,45 @@ function MobileMenu() {
                 </button>
                 
                 {/* Accordion content */}
-                {activeSection === item && mobileMenuData[item] && (
+                {activeSection === item && (megaMenuData[item] || mobileMenuData[item]) && (
                   <div className="bg-white/5 px-5 py-4 border-b border-white/10">
-                    {mobileMenuData[item].sections.map((section) => (
-                      <div key={section.title} className="mb-5 last:mb-0">
-                        <h4 className="text-[10px] tracking-[2px] uppercase text-brand-gold font-normal mb-3">
-                          {section.title}
-                        </h4>
-                        {renderSubItems(section.items)}
+                    {megaMenuData[item] ? (
+                      <div className="space-y-6">
+                        {megaMenuData[item].columns.map((col) => (
+                          <div key={col.title}>
+                            <h4 className="text-[10px] tracking-[2px] uppercase text-brand-gold font-normal mb-3">
+                              {col.title}
+                            </h4>
+                            <ul className="ml-4 mt-3 space-y-3">
+                              {col.items.map((entry) => (
+                                <li key={entry.label}>
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      entry.collectionId
+                                        ? navigateToCollection(entry.subCollection)
+                                        : navigateToShape(entry.shape)
+                                    }
+                                    className="text-[11px] tracking-[2px] uppercase text-white/70 hover:text-brand-gold transition text-left"
+                                  >
+                                    {entry.label}
+                                  </button>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    ) : (
+                      mobileMenuData[item]?.sections.map((section) => (
+                        <div key={section.title} className="mb-5 last:mb-0">
+                          <h4 className="text-[10px] tracking-[2px] uppercase text-brand-gold font-normal mb-3">
+                            {section.title}
+                          </h4>
+                          {renderSubItems(section.items)}
+                        </div>
+                      ))
+                    )}
                   </div>
                 )}
                 
@@ -282,36 +425,36 @@ function MobileMenu() {
               ))}
             </div>
             
-            {/* Country/Currency selector with dropdown */}
+            {/* Currency selector with dropdown */}
             <div className="relative">
               <button 
-                onClick={() => setCountryDropdownOpen(!countryDropdownOpen)}
+                onClick={() => setCurrencyDropdownOpen(!currencyDropdownOpen)}
                 className="flex items-center justify-center gap-2 text-[11px] tracking-[2px] text-white/70 font-light pt-2 w-full hover:text-brand-gold transition"
               >
                 <House size={14} strokeWidth={1.5} />
-                <span>{selectedCountry.name} ({selectedCountry.currency} {selectedCountry.symbol})</span>
+                <span>{currency}</span>
                 <ChevronDown 
                   size={12} 
                   strokeWidth={1.5} 
-                  className={`transition-transform ${countryDropdownOpen ? 'rotate-180' : ''}`}
+                  className={`transition-transform ${currencyDropdownOpen ? 'rotate-180' : ''}`}
                 />
               </button>
               
               {/* Dropdown */}
-              {countryDropdownOpen && (
+              {currencyDropdownOpen && (
                 <div className="absolute bottom-full left-0 right-0 bg-brand-green border border-white/10 shadow-lg mb-2 py-2">
-                  {countries.map((country) => (
+                  {supportedCurrencies.map((c) => (
                     <button
-                      key={country.code}
+                      key={c.code}
                       onClick={() => {
-                        setSelectedCountry(country);
-                        setCountryDropdownOpen(false);
+                        setCurrency(c.code);
+                        setCurrencyDropdownOpen(false);
                       }}
                       className={`w-full px-4 py-2 text-left text-[11px] tracking-[1.5px] uppercase hover:bg-white/5 transition ${
-                        selectedCountry.code === country.code ? 'text-brand-gold font-medium' : 'text-white/70'
+                        currency === c.code ? 'text-brand-gold font-medium' : 'text-white/70'
                       }`}
                     >
-                      {country.name} ({country.currency} {country.symbol})
+                      {c.label}
                     </button>
                   ))}
                 </div>
@@ -324,109 +467,71 @@ function MobileMenu() {
   );
 }
 
-// Mega Menu Data
-const megaMenuData: Record<string, {
-  columns: { title: string; items: string[] }[];
-  images: { src: string; label: string }[];
-}> = {
-  "ENGAGEMENT RINGS": {
-    columns: [
-      {
-        title: "All Engagement Rings",
-        items: ["Create Your Own"],
-      },
-      {
-        title: "Shop By Shape",
-        items: ["Round Brilliant", "Princess", "Cushion", "Oval", "Pear"],
-      },
-      {
-        title: "Shop By Style",
-        items: ["Solitaire", "Halo", "Diamond Shoulder"],
-      },
-    ],
-    images: [
-      {
-        src: "/images/roundbriliant.webp",
-        label: "Round Brilliant",
-      },
-      {
-        src: "/images/cusioncut.webp",
-        label: "Cushion Halo",
-      },
-    ],
-  },
-  "WEDDING RINGS": {
-    columns: [
-      {
-        title: "Women Collection",
-        items: ["Women's Plain", "Women's Diamond", "Eternity Rings"],
-      },
-      {
-        title: "Men's Collection",
-        items: ["Men's Plain", "Men's Diamond", "Men's Pattern"],
-      },
-      {
-        title: "Shop By Style",
-        items: ["Traditional Court", "Flat Court", "Soft Court"],
-      },
-    ],
-    images: [
-      {
-        src: "/images/womenswedding.webp",
-        label: "Eternity Rings",
-      },
-    ],
-  },
-};
-
 // Dynamic Mega Menu Component
-function MegaMenu({ activeMenu }: { activeMenu: string }) {
+function MegaMenu({ activeMenu, onClose }: { activeMenu: string; onClose: () => void }) {
   const menuData = megaMenuData[activeMenu];
-  
+  const navigate = useNavigate();
+
   if (!menuData) return null;
+
+  const handleShapeClick = (shape: string) => {
+    onClose();
+    if (shape) {
+      navigate(`/products?shape=${encodeURIComponent(shape)}`);
+    } else {
+      navigate("/products");
+    }
+  };
+
+  const handleCollectionClick = (collectionId: string, subCollectionName?: string) => {
+    onClose();
+    const params = new URLSearchParams();
+    if (subCollectionName) params.set("subCollection", subCollectionName);
+    navigate(`/products?${params.toString()}`);
+  };
 
   return (
     <div className="absolute left-0 top-full w-full bg-brand-green/95 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.25)] border-t-2 border-brand-gold/60 z-50">
       <div className="max-w-[1440px] mx-auto px-4 md:px-12 py-8 md:py-12 grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-10">
-        {/* Columns */}
         {menuData.columns.map((col, index) => (
           <div key={index} className="col-span-1">
             <div className="flex items-center gap-2 mb-4 md:mb-6">
               <span className="block w-4 h-[1px] bg-brand-gold/60"></span>
-              <h4 className="text-[11px] md:text-[12px] tracking-[3px] uppercase text-brand-gold font-medium">
-                {col.title}
-              </h4>
+              <h4 className="text-[11px] md:text-[12px] tracking-[3px] uppercase text-brand-gold font-medium">{col.title}</h4>
             </div>
             <ul className="space-y-2 md:space-y-3 text-[11px] md:text-[12px] tracking-[2px] md:tracking-[3px] uppercase">
               {col.items.map((item) => (
-                <li key={item} className="cursor-pointer hover:text-brand-gold transition duration-300 text-white/80 hover:translate-x-1">
-                  {item}
+                <li
+                  key={item.label}
+                  onClick={() =>
+                    item.collectionId
+                      ? handleCollectionClick(item.collectionId, item.subCollection)
+                      : handleShapeClick(item.shape)
+                  }
+                  className="cursor-pointer hover:text-brand-gold transition duration-300 text-white/80 hover:translate-x-1"
+                >
+                  {item.label}
                 </li>
               ))}
             </ul>
           </div>
         ))}
 
-        {/* Images */}
         {menuData.images.map((img, index) => (
-          <div key={index} className="group col-span-1">
+          <div key={index} className="group col-span-1 cursor-pointer" onClick={() => handleShapeClick(img.shape)}>
             <div className="overflow-hidden rounded-xl border border-brand-gold/20 shadow-[0_8px_24px_rgba(0,0,0,0.35)]">
-              <img
-                src={img.src}
-                alt={img.label}
-                className="w-full h-[150px] md:h-[220px] object-cover transition-transform duration-[1800ms] ease-out group-hover:scale-[1.05]"
-              />
+              <img src={img.src} alt={img.label} className="w-full h-[150px] md:h-[220px] object-cover transition-transform duration-[1800ms] ease-out group-hover:scale-[1.05]" />
             </div>
-            <p className="text-center mt-3 md:mt-4 tracking-[2px] md:tracking-[3px] uppercase text-[10px] md:text-[11px] text-white/70 group-hover:text-brand-gold transition duration-300">
-              {img.label}
-            </p>
+            <p className="text-center mt-3 md:mt-4 tracking-[2px] md:tracking-[3px] uppercase text-[10px] md:text-[11px] text-white/70 group-hover:text-brand-gold transition duration-300">{img.label}</p>
           </div>
         ))}
       </div>
 
-      {/* Buttons */}
       <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-6 pb-8 md:pb-10 px-4">
-        <button className="px-6 md:px-8 py-3 md:py-4 bg-brand-gold text-brand-green border border-brand-gold tracking-[2px] md:tracking-[3px] uppercase text-[11px] md:text-[12px] font-semibold rounded-lg hover:bg-brand-gold-soft hover:shadow-[0_8px_24px_rgba(211,160,42,0.25)] transition duration-300">
+        <button
+          onClick={() => { onClose(); navigate("/products"); }}
+          className="px-6 md:px-8 py-3 md:py-4 bg-brand-gold text-brand-green border border-brand-gold tracking-[2px] md:tracking-[3px] uppercase text-[11px] md:text-[12px] font-semibold rounded-lg hover:bg-brand-gold-soft hover:shadow-[0_8px_24px_rgba(211,160,42,0.25)] transition duration-300"
+        >
           Explore {activeMenu}
         </button>
         <button className="px-6 md:px-8 py-3 md:py-4 bg-transparent text-brand-gold border border-brand-gold/60 tracking-[2px] md:tracking-[3px] uppercase text-[11px] md:text-[12px] font-semibold rounded-lg hover:bg-brand-gold hover:text-brand-green transition duration-300">
@@ -439,15 +544,28 @@ function MegaMenu({ activeMenu }: { activeMenu: string }) {
 
 export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");  
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [currencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
+
+  const handleSearch = (e: React.KeyboardEvent | React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+    }
+    setSearchOpen(false);
+    setSearchTerm("");
+  };
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const { cartCount } = useCart();
   const { user, isAuthenticated, logout } = useUser();
+  const { currency, setCurrency } = useCurrency();
   const searchButtonRef = useRef<HTMLDivElement>(null);
   const searchDrawerRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const currencyMenuRef = useRef<HTMLDivElement>(null);
   
 
   const handleMenuClick = (item: string) => {
@@ -502,6 +620,24 @@ export default function Navbar() {
     };
   }, [userMenuOpen]);
 
+  useEffect(() => {
+    if (!currencyDropdownOpen) return;
+
+    const handlePointerDown = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node;
+      if (currencyMenuRef.current?.contains(target)) return;
+      setCurrencyDropdownOpen(false);
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("touchstart", handlePointerDown);
+
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("touchstart", handlePointerDown);
+    };
+  }, [currencyDropdownOpen]);
+
   return (
     <>
       <header className="sticky top-0 z-50 w-full bg-brand-green border-b border-white/10 shadow-none relative">
@@ -517,9 +653,42 @@ export default function Navbar() {
           <div className="flex items-center z-10">
             <MobileMenu />
             {!isMobile && (
-              <div className="flex items-center gap-2 text-[11px] md:text-[13px] tracking-[2px] md:tracking-[3px] text-white/70 font-light ml-3">
-                <House size={15} strokeWidth={1.5} />
-                <span>USD $</span>
+              <div className="relative ml-3" ref={currencyMenuRef}>
+                <button
+                  type="button"
+                  onClick={() => setCurrencyDropdownOpen((v) => !v)}
+                  className="flex items-center gap-2 text-[11px] md:text-[13px] tracking-[2px] md:tracking-[3px] text-white/70 font-light hover:text-brand-gold transition"
+                  aria-haspopup="menu"
+                  aria-expanded={currencyDropdownOpen}
+                >
+                  <House size={15} strokeWidth={1.5} />
+                  <span>{currency}</span>
+                  <ChevronDown
+                    size={14}
+                    strokeWidth={1.5}
+                    className={`transition-transform ${currencyDropdownOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
+
+                {currencyDropdownOpen && (
+                  <div className="absolute left-0 mt-3 min-w-[160px] bg-brand-green border border-white/10 shadow-lg py-2 rounded-lg z-50">
+                    {supportedCurrencies.map((c) => (
+                      <button
+                        key={c.code}
+                        type="button"
+                        onClick={() => {
+                          setCurrency(c.code);
+                          setCurrencyDropdownOpen(false);
+                        }}
+                        className={`w-full px-4 py-2 text-left text-[11px] tracking-[1.5px] uppercase hover:bg-white/5 transition ${
+                          currency === c.code ? "text-brand-gold font-medium" : "text-white/70"
+                        }`}
+                      >
+                        {c.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -652,7 +821,7 @@ export default function Navbar() {
               className="fixed inset-0 top-[140px] z-40"
               onClick={() => setActiveMenu(null)}
             ></div>
-            <MegaMenu activeMenu={activeMenu} />
+            <MegaMenu activeMenu={activeMenu} onClose={() => setActiveMenu(null)} />
           </>
         )}
 
@@ -670,11 +839,18 @@ export default function Navbar() {
                 type="text"
                 placeholder="SEARCH FOR DIAMONDS, RINGS, JEWELRY..."
                 className="ml-3 md:ml-5 flex-1 text-[14px] md:text-[18px] tracking-[2px] md:tracking-[4px] outline-none bg-transparent text-white placeholder:text-white/50 font-light"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch(e)}
                 autoFocus
               />
 
               <button 
-                onClick={() => setSearchOpen(false)}
+                type="button"
+                onClick={() => {
+                  setSearchOpen(false);
+                  setSearchTerm("");
+                }}
                 className="p-2 hover:bg-white/10 rounded-lg transition duration-300"
               >
                 <X size={24} strokeWidth={1.5} className="text-brand-gold/70 hover:text-white w-5 h-5 md:w-6 md:h-6" />

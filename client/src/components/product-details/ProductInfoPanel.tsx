@@ -1,5 +1,6 @@
 import LuxuryDropdown from "../ui/luxury-dropdown";
 import { useProductDetailsContext } from "@/contexts/storefront/ProductDetailsContext";
+import { useCurrency } from "@/contexts/storefront/CurrencyContext";
 
 export default function ProductInfoPanel() {
   const {
@@ -15,6 +16,7 @@ export default function ProductInfoPanel() {
     handleAddToCart,
     sizeError,
   } = useProductDetailsContext();
+  const { currency, formatPriceFromUSD } = useCurrency();
 
   if (!product) {
     return null;
@@ -41,7 +43,8 @@ export default function ProductInfoPanel() {
 
       {/* Price */}
       <p className="text-[28px] md:text-[34px] font-light text-brand-green mb-4 md:mb-2">
-        ${totalPrice.toLocaleString("en-US", { minimumFractionDigits: 2 })} <span className="text-[16px] md:text-[18px] text-black/50">USD</span>
+        {formatPriceFromUSD(totalPrice)}{" "}
+        <span className="text-[16px] md:text-[18px] text-black/50">{currency}</span>
       </p>
 
       <hr className="mb-6 md:mb-8 border-brand-gold/20" />
@@ -88,9 +91,8 @@ export default function ProductInfoPanel() {
         onClick={handleAddToCart}
         className="w-full h-[52px] md:h-[58px] bg-brand-gold text-brand-green tracking-[3px] md:tracking-[4px] uppercase text-[12px] md:text-[13px] font-semibold rounded-xl hover:bg-brand-gold-soft hover:shadow-[0_8px_24px_rgba(211,160,42,0.30)] transition duration-300"
       >
-        Add To Cart • ${totalPrice.toLocaleString("en-US", { minimumFractionDigits: 2 })} USD
+        Add To Cart • {formatPriceFromUSD(totalPrice)} {currency}
       </button>
     </div>
   );
 }
-

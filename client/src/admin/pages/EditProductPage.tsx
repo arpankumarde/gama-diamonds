@@ -19,17 +19,20 @@ import {
 const COLOR_OPTIONS = ["D", "E", "F", "G", "H", "I", "J", "K", "L", "M"];
 const SHAPE_OPTIONS = ["Round", "Princess", "Solitaire", "Cushion", "Three Stone", "Halo", "Emerald", "Oval", "Radiant", "Asscher", "Marquise", "Heart", "Pear", "Elongated Cushion", "Trillion", "Baguette", "Rose Cut"];
 const METAL_OPTIONS = ["9K White Gold", "9K Yellow Gold", "9K Rose Gold", "18K Rose Gold", "18K White Gold", "18K Yellow Gold", "Platinum"];
-const DIAMOND_TYPE_OPTIONS = ["Lab Diamond", "Natural Diamond"];
+const DIAMOND_TYPE_OPTIONS = ["Lab Diamond", "Natural Diamond", "Lab Diamond Engagement Rings", "Emerald Cut", "Coloured Diamonds", "Real Diamonds Engagement Rings"];
 
 export default function EditProductPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { products, categories, updateProduct } = useAdminData();
+  const { products, categories, collections, updateProduct } = useAdminData();
 
   const product = useMemo(
     () => products.find((item) => item._id === id),
     [id, products],
   );
+
+  // Detect product type based on what field is set
+  const productType = product?.collectionRef ? "collection" : "category";
 
   const categoryId = typeof product?.category === "object" ? product.category._id : product?.category ?? "";
 
@@ -41,6 +44,8 @@ export default function EditProductPage() {
     salePrice: product?.salePrice ? String(product.salePrice) : "",
     stock: product ? String(product.stock) : "",
     category: categoryId,
+    collection: product?.collectionRef ?? "",
+    subCollection: product?.subCollection ?? "",
     carat: product?.carat ? String(product.carat) : "",
     color: product?.color ?? "",
     shape: product?.shape ?? "",
@@ -69,6 +74,8 @@ export default function EditProductPage() {
       salePrice: product.salePrice ? String(product.salePrice) : "",
       stock: String(product.stock),
       category: catId,
+      collection: product.collectionRef ?? "",
+      subCollection: product.subCollection ?? "",
       carat: product.carat ? String(product.carat) : "",
       color: product.color ?? "",
       shape: product.shape ?? "",
@@ -148,7 +155,9 @@ export default function EditProductPage() {
         sku: formData.sku.trim().toUpperCase(),
         price: Number(formData.price),
         salePrice: Number(formData.salePrice) || undefined,
-        category: formData.category || undefined,
+        category: productType === "category" ? (formData.category || undefined) : undefined,
+        collectionRef: productType === "collection" ? (formData.collection || undefined) : undefined,
+        subCollection: productType === "collection" ? (formData.subCollection || undefined) : undefined,
         images: images.filter(Boolean),
         stock: Number(formData.stock) || 0,
         carat: Number(formData.carat) || undefined,
@@ -159,7 +168,7 @@ export default function EditProductPage() {
           ? formData.tags.split(",").map((t) => t.trim().toLowerCase()).filter(Boolean)
           : [],
         video: formData.video || undefined,
-        diamondType: (formData.diamondType as "Lab Diamond" | "Natural Diamond") || undefined,
+        diamondType: (formData.diamondType as "Lab Diamond" | "Natural Diamond" | "Lab Diamond Engagement Rings" | "Emerald Cut" | "Coloured Diamonds" | "Real Diamonds Engagement Rings") || undefined,
       });
       toast.success("Product updated successfully.");
       navigate("/admin/products");
@@ -175,7 +184,7 @@ export default function EditProductPage() {
       <AdminEditPageShell
         eyebrow="Catalog Control"
         title={`Edit ${product.name}`}
-        description="Update product details, images, and video."
+        description={`Editing product added by ${productType === "collection" ? "Collection" : "Category"}.`}
         backTo="/admin/products"
         backLabel="Back to Products"
         actions={
@@ -288,21 +297,61 @@ export default function EditProductPage() {
             />
           </div>
 
-          <div className="space-y-2">
-            <Label className="text-black">Category</Label>
-            <Select value={formData.category} onValueChange={(v) => setField("category", v)}>
-              <SelectTrigger className="h-11 rounded-md border-gray-300 bg-white text-black">
-                <SelectValue placeholder="Choose category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((cat) => (
-                  <SelectItem key={cat._id} value={cat._id}>
-                    {cat.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          {productType === "category" ? (
+            <div className="space-y-2">
+              <Label className="text-black">Category</Label>
+              <Select value={formData.category} onValueChange={(v) => setField("category", v)}>
+                <SelectTrigger className="h-11 rounded-md border-gray-300 bg-white text-black">
+                  <SelectValue placeholder="Choose category" />
+                </SelectTrigger>
+                <SelectContent className="max-h-[220px] overflow-y-auto" position="popper">
+                  {categories.map((cat) => (
+                    <SelectItem key={cat._id} value={cat._id}>{cat.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          ) : (
+            <>
+              <div className="space-y-2">
+                <Label className="text-black">Collection Name</Label>
+                <Select value={formData.collection} onValueChange={(v) => { setField("collection", v); setField("subCollection", ""); }}>
+                  <SelectTrigger className="h-11 rounded-md border-gray-300 bg-white text-black">
+                    <SelectValue placeholder="Choose collection" />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-[220px] overflow-y-auto" position="popper">
+                    {collections.map((col) => (
+                      <SelectItem key={col._id} value={col._id}>{col.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {formData.collection && (
+                <div className="space-y-2">
+                  <Label className="text-black">Sub-Collection</Label>
+                  {(() => {
+                    const selectedCol = collections.find((c) => c._id === formData.collection);
+                    const subs = selectedCol?.subCollections ?? [];
+                    return subs.length > 0 ? (
+                      <Select value={formData.subCollection} onValueChange={(v) => setField("subCollection", v)}>
+                        <SelectTrigger className="h-11 rounded-md border-gray-300 bg-white text-black">
+                          <SelectValue placeholder="Choose sub-collection" />
+                        </SelectTrigger>
+                        <SelectContent className="max-h-[220px] overflow-y-auto" position="popper">
+                          {subs.map((sub) => (
+                            <SelectItem key={sub._id} value={sub.name}>{sub.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <p className="text-[12px] text-gray-400 pt-2">No sub-collections found.</p>
+                    );
+                  })()}
+                </div>
+              )}
+            </>
+          )}
 
           <div className="space-y-2">
             <Label className="text-black">Color</Label>
@@ -310,7 +359,7 @@ export default function EditProductPage() {
               <SelectTrigger className="h-11 rounded-md border-gray-300 bg-white text-black">
                 <SelectValue placeholder="Choose color grade" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-h-[220px] overflow-y-auto" position="popper">
                 {COLOR_OPTIONS.map((opt) => (
                   <SelectItem key={opt} value={opt}>{opt}</SelectItem>
                 ))}
@@ -324,7 +373,7 @@ export default function EditProductPage() {
               <SelectTrigger className="h-11 rounded-md border-gray-300 bg-white text-black">
                 <SelectValue placeholder="Choose shape" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-h-[220px] overflow-y-auto" position="popper">
                 {SHAPE_OPTIONS.map((opt) => (
                   <SelectItem key={opt} value={opt}>{opt}</SelectItem>
                 ))}
@@ -338,7 +387,7 @@ export default function EditProductPage() {
               <SelectTrigger className="h-11 rounded-md border-gray-300 bg-white text-black">
                 <SelectValue placeholder="Choose metal" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-h-[220px] overflow-y-auto" position="popper">
                 {METAL_OPTIONS.map((opt) => (
                   <SelectItem key={opt} value={opt}>{opt}</SelectItem>
                 ))}
@@ -352,7 +401,7 @@ export default function EditProductPage() {
               <SelectTrigger className="h-11 rounded-md border-gray-300 bg-white text-black">
                 <SelectValue placeholder="Choose diamond type" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-h-[220px] overflow-y-auto" position="popper">
                 {DIAMOND_TYPE_OPTIONS.map((opt) => (
                   <SelectItem key={opt} value={opt}>{opt}</SelectItem>
                 ))}

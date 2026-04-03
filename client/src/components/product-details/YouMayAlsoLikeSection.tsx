@@ -1,6 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router";
 import { useProductDetailsContext } from "@/contexts/storefront/ProductDetailsContext";
+import { useCurrency } from "@/contexts/storefront/CurrencyContext";
 
 export default function YouMayAlsoLikeSection() {
   const {
@@ -10,6 +11,7 @@ export default function YouMayAlsoLikeSection() {
     youMayLikeSliderRef,
     slideYouMayLike,
   } = useProductDetailsContext();
+  const { currency, formatPriceFromUSD } = useCurrency();
 
   const cards = youMayAlsoLikeCards;
 
@@ -86,7 +88,7 @@ export default function YouMayAlsoLikeSection() {
                   {card.description}
                 </p>
                 <p className="text-[14px] md:text-[16px] font-semibold text-brand-gold group-hover:text-[#111] transition duration-300">
-                  ${card.price.toLocaleString("en-US", { minimumFractionDigits: 2 })} USD
+                  {formatPriceFromUSD(card.price)} {currency}
                 </p>
                 <div className="w-0 h-[1px] bg-brand-gold mx-auto mt-2 group-hover:w-8 transition-all duration-500"></div>
               </div>

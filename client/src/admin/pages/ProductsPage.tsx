@@ -61,24 +61,24 @@ export default function ProductsPage() {
           title="Product List"
           description="Search and refine your assortment by category or signature collection."
         >
-          <div className="space-y-5 px-6 pb-6">
-            <div className="flex flex-col gap-3 xl:flex-row">
-              <div className="relative flex-1">
-                <Search className="pointer-events-none absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <Input
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Search product"
-                  className="h-11 rounded-md border-gray-300 bg-white pl-11"
-                />
-              </div>
-              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                <SelectTrigger className="h-11 w-full rounded-md border-gray-300 bg-white xl:w-[220px]">
-                  <SelectValue placeholder="Filter by category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {["All Categories", ...categories.map((item) => item.name)].map((option) => (
-                    <SelectItem key={option} value={option}>
+	          <div className="space-y-5 px-6 pb-6">
+	            <div className="flex flex-col gap-3 xl:flex-row">
+	              <div className="relative flex-1">
+	                <Search className="pointer-events-none absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-gray-400" />
+	                <Input
+	                  value={query}
+	                  onChange={(event) => setQuery(event.target.value)}
+	                  placeholder="Search product"
+	                  className="h-11 rounded-md border-gray-300 bg-white py-2 pl-11 text-sm"
+	                />
+	              </div>
+	              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+	                <SelectTrigger className="h-11 w-full rounded-md border-gray-300 bg-white py-2 text-sm data-[size=default]:h-11 xl:w-[220px]">
+	                  <SelectValue placeholder="Filter by category" />
+	                </SelectTrigger>
+	                <SelectContent>
+	                  {["All Categories", ...categories.map((item) => item.name)].map((option) => (
+	                    <SelectItem key={option} value={option}>
                       {option}
                     </SelectItem>
                   ))}
@@ -162,6 +162,8 @@ export default function ProductsPage() {
           </div>
         </TableShell>
       </div>
+
+
 
       <AlertDialog open={!!deleteTarget} onOpenChange={(open) => { if (!open && !deleting) setDeleteTarget(null); }}>
         <AlertDialogContent>

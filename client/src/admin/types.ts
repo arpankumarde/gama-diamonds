@@ -39,6 +39,8 @@ export type ProductItem = {
   tags?: string[];
   video?: string;
   diamondType?: "Lab Diamond" | "Natural Diamond";
+  collectionRef?: string;
+  subCollection?: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -58,6 +60,7 @@ export type CollectionItem = {
   name: string;
   products: number;
   curator?: string;
+  subCollections?: { _id: string; name: string }[];
 };
 
 export type UserItem = {

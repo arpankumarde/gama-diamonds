@@ -56,6 +56,8 @@ export interface Product {
   tags: string[];
   video?: string;
   diamondType?: "Lab Diamond" | "Natural Diamond";
+  collectionRef?: string;
+  subCollection?: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -95,6 +97,8 @@ export async function getAllProducts(
         params.append(key, String(value));
       }
     });
+    if (filters.collection) params.append("collection", filters.collection);
+    if (filters.subCollection) params.append("subCollection", filters.subCollection);
 
     const response = await fetch(`${API_BASE_URL}/products?${params}`, {
       method: "GET",
@@ -316,7 +320,9 @@ export interface CreateProductPayload {
   description: string;
   price: number;
   sku: string;
-  category: string;
+  category?: string;
+  collectionRef?: string;
+  subCollection?: string;
   images: string[];
   stock: number;
   carat?: number;
@@ -415,6 +421,28 @@ export async function deleteCollectionAPI(id: string): Promise<{ success: boolea
   });
   const data = await response.json();
   if (!response.ok) throw new Error(data.message || "Failed to delete collection");
+  return data;
+}
+
+export async function addSubCollectionAPI(collectionId: string, name: string): Promise<{ success: boolean; data: any }> {
+  const response = await fetch(`${API_BASE_URL}/collections/${collectionId}/subcollections`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ name }),
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.message || "Failed to add sub-collection");
+  return data;
+}
+
+export async function deleteSubCollectionAPI(collectionId: string, subId: string): Promise<{ success: boolean; data: any }> {
+  const response = await fetch(`${API_BASE_URL}/collections/${collectionId}/subcollections/${subId}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.message || "Failed to delete sub-collection");
   return data;
 }
 

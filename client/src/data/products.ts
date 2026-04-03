@@ -11,27 +11,16 @@ export interface CategoryItem {
 }
 
 export const diamondCollections: CollectionItem[] = [
-  { slug: "lab-diamond-engagement-rings", title: "Lab Diamond Engagement Rings", image: "/images/labdiamond.webp" },
-  { slug: "emerald-cut", title: "Emerald Cut", image: "/images/emrald.webp" },
-  { slug: "coloured-diamonds", title: "Coloured Diamonds", image: "/images/coloreddiamond.webp" },
-  { slug: "real-diamonds-engagement-rings", title: "Real Diamonds Engagement Rings", image: "/images/realdiamond.webp" },
+  { slug: "lab-diamond-engagement-rings", title: "Lab Diamond Engagement Rings", image: "https://heeradiamonds.com/cdn/shop/files/ENGAGEMENT_RING_IMAGE_3_1296x.jpg?v=1741977826" },
+  { slug: "emerald-cut", title: "Emerald Cut", image: "https://heeradiamonds.com/cdn/shop/files/emerald_cut_engagement_ring_1296x.jpg?v=1742085417" },
+  { slug: "coloured-diamonds", title: "Coloured Diamonds", image: "https://heeradiamonds.com/cdn/shop/files/coloured_diamond_engagement_rings_1296x.jpg?v=1742085417" },
+  { slug: "real-diamonds-engagement-rings", title: "Real Diamonds Engagement Rings", image: "https://heeradiamonds.com/cdn/shop/files/ENGAGEMENT_RING_IMAGE_1296x.jpg?v=1741977825" },
 ];
 
-export const productCategories: CategoryItem[] = [
-  { slug: "new-arrival", title: "New Arrivals", image: "/images/newarrival.webp" },
-  { slug: "engagement-rings", title: "Engagement Rings", image: "/images/engagemnetring.webp" },
-  { slug: "eternity-rings", title: "Eternity Rings", image: "/images/eternityring.webp" },
-  { slug: "bespoke", title: "Bespoke Design", image: "/images/bespoke.webp" },
-  { slug: "jewellery", title: "Jewellery", image: "/images/jwelery.webp" },
-  { slug: "oval-shape", title: "Oval Shape", image: "/images/ovalshape.webp" },
-  { slug: "round-brilliant", title: "Round Brilliant Cut", image: "/images/round.webp" },
-  { slug: "elongated-cushion", title: "Elongated Cushion", image: "/images/elongated.webp" },
-];
+
 
 export function getCollectionBySlug(slug?: string) {
   return diamondCollections.find((c) => c.slug === slug);
 }
 
-export function getCategoryBySlug(slug?: string) {
-  return productCategories.find((c) => c.slug === slug);
-}
+

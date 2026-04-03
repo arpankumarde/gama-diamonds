@@ -6,7 +6,9 @@ import {
   removeProduct,
   getCollections,
   getCollectionById,
-  deleteCollection
+  deleteCollection,
+  addSubCollection,
+  deleteSubCollection
 } from "../controllers/collection.controller.js";
 import { authenticate, authorize } from "../middleware/auth.middleware.js";
 
@@ -22,5 +24,7 @@ router.put("/:id", authenticate, authorize("admin", "superadmin"), updateCollect
 router.patch("/:id/products/add", authenticate, authorize("admin", "superadmin"), addProduct);
 router.delete("/:id/products/:productId", authenticate, authorize("admin", "superadmin"), removeProduct);
 router.delete("/:id", authenticate, authorize("admin", "superadmin"), deleteCollection);
+router.post("/:id/subcollections", authenticate, authorize("admin", "superadmin"), addSubCollection);
+router.delete("/:id/subcollections/:subId", authenticate, authorize("admin", "superadmin"), deleteSubCollection);
 
 export default router;

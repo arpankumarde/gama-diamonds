@@ -15,13 +15,11 @@ export default function AddCollectionPage() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     const trimmedName = name.trim();
     if (!trimmedName) {
       toast.error("Collection name is required.");
       return;
     }
-
     try {
       await addCollection({ name: trimmedName, curator: curator.trim() });
       toast.success("Collection created successfully.");
@@ -36,23 +34,15 @@ export default function AddCollectionPage() {
       <AdminEditPageShell
         eyebrow="Signature Assortments"
         title="Add Collection"
-        description="Create a new collection page in the same refined admin theme used for editing."
+        description="Create a new collection for organizing products."
         backTo="/admin/collections"
         backLabel="Back to Collections"
         actions={
           <>
-            <Button
-              asChild
-              type="button"
-              variant="outline"
-              className="rounded-md border-gray-300 bg-white text-black hover:bg-gray-50 hover:text-black"
-            >
+            <Button asChild type="button" variant="outline" className="rounded-md border-gray-300 bg-white text-black hover:bg-gray-50 hover:text-black">
               <Link to="/admin/collections">Cancel</Link>
             </Button>
-            <Button
-              type="submit"
-              className="rounded-md bg-emerald-600 text-white hover:bg-emerald-700"
-            >
+            <Button type="submit" className="rounded-md bg-emerald-600 text-white hover:bg-emerald-700">
               Add Collection
             </Button>
           </>
@@ -64,7 +54,7 @@ export default function AddCollectionPage() {
             <Input
               id="collection-name"
               value={name}
-              onChange={(event) => setName(event.target.value)}
+              onChange={(e) => setName(e.target.value)}
               placeholder="Enter collection name"
               className="h-11 rounded-md border-gray-300 bg-white text-black placeholder:text-gray-500"
             />
@@ -75,7 +65,7 @@ export default function AddCollectionPage() {
             <Input
               id="collection-curator"
               value={curator}
-              onChange={(event) => setCurator(event.target.value)}
+              onChange={(e) => setCurator(e.target.value)}
               placeholder="Enter curator name"
               className="h-11 rounded-md border-gray-300 bg-white text-black placeholder:text-gray-500"
             />

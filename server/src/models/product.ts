@@ -17,10 +17,12 @@ const ProductSchema = new Schema(
     stock: { type: Number, default: 0, min: 0 },
     tags: [{ type: String, trim: true, lowercase: true }],
     video: { type: String },
-    diamondType: { type: String, enum: ["Lab Diamond", "Natural Diamond"] },
+    diamondType: { type: String, enum: ["Lab Diamond", "Natural Diamond", "Lab Diamond Engagement Rings", "Emerald Cut", "Coloured Diamonds", "Real Diamonds Engagement Rings"] },
+    collectionRef: { type: Schema.Types.ObjectId, ref: "Collection" },
+    subCollection: { type: String, trim: true },
     isActive: { type: Boolean, default: true }
   },
-  { timestamps: true }
+  { timestamps: true, suppressReservedKeysWarning: true }
 );
 
 const Product = mongoose.models.Product || mongoose.model("Product", ProductSchema);

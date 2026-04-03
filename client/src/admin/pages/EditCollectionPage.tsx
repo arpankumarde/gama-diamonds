@@ -26,13 +26,11 @@ export default function EditCollectionPage() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     const trimmedName = name.trim();
     if (!trimmedName) {
       toast.error("Collection name is required.");
       return;
     }
-
     try {
       await updateCollection(collection._id, { name: trimmedName, curator: curator.trim() });
       toast.success("Collection updated successfully.");
@@ -47,7 +45,7 @@ export default function EditCollectionPage() {
       <AdminEditPageShell
         eyebrow="Signature Assortments"
         title={`Edit ${collection.name}`}
-        description="Refine collection naming and ownership while keeping the same luxury admin look and feel."
+        description="Update collection details."
         backTo="/admin/collections"
         backLabel="Back to Collections"
         actions={
@@ -75,7 +73,7 @@ export default function EditCollectionPage() {
             <Input
               id="collection-name"
               value={name}
-              onChange={(event) => setName(event.target.value)}
+              onChange={(e) => setName(e.target.value)}
               placeholder="Enter collection name"
               className="h-11 rounded-md border-gray-300 bg-white text-black placeholder:text-gray-500"
             />
@@ -86,7 +84,7 @@ export default function EditCollectionPage() {
             <Input
               id="collection-curator"
               value={curator}
-              onChange={(event) => setCurator(event.target.value)}
+              onChange={(e) => setCurator(e.target.value)}
               placeholder="Enter curator name"
               className="h-11 rounded-md border-gray-300 bg-white text-black placeholder:text-gray-500"
             />

@@ -3,43 +3,19 @@ import { FileCheck, Gift, PenTool, RefreshCcw, type LucideIcon } from "lucide-re
 export const heroImages = [
   
   "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1800",
+  "https://heeradiamonds.com/cdn/shop/files/engagement_ring_and_eternity_ring_with_cream_background_jpg_244887e6-bebf-46a8-88ea-bb2bca4d3564_1400x.jpg?v=1769086269",
   "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=1800",
-  "/images/herobanner.webp",
 ];
 
 export const shapeItems = [
-  {
-    title: "Round Cut",
-    image: "/images/roundcut.webp",
-  },
-  {
-    title: "Emerald Cut",
-    image: "/images/emraldcut.webp",
-  },
-  {
-    title: "Cushion Cut",
-    image: "/images/cusioncut.webp",
-  },
-  {
-    title: "Pear Cut",
-    image: "/images/pearcut.webp",
-  },
-  {
-    title: "Radiant Cut",
-    image: "/images/radiant.webp",
-  },
-  {
-    title: "Princess Cut",
-    image: "/images/princesscut.webp",
-  },
-  {
-    title: "Oval Cut",
-    image: "/images/ovalcut.webp",
-  },
-  {
-    title: "Marquise Cut",
-    image: "/images/marquisecut.webp",
-  },
+  { title: "Round Cut",    image: "https://heeradiamonds.com/cdn/shop/files/loose_diamond_1_540x.jpg?v=1742151105",    slug: "Round" },
+  { title: "Emerald Cut",  image: "https://heeradiamonds.com/cdn/shop/files/emerald_cut_loose_diamond_540x.jpg?v=1742151355",  slug: "Emerald" },
+  { title: "Cushion Cut",  image: "https://heeradiamonds.com/cdn/shop/files/cushion_cut_loose_diamond_540x.jpg?v=1742151470",  slug: "Cushion" },
+  { title: "Pear Cut",     image: "https://heeradiamonds.com/cdn/shop/files/pear_cut_loose_diamond_540x.jpg?v=1742151171",    slug: "Pear" },
+  { title: "Radiant Cut",  image: "https://heeradiamonds.com/cdn/shop/files/Untitled_design_1_53a5acde-de0b-4337-9b92-8b68ed96d85e_540x.png?v=1767797848",    slug: "Radiant" },
+  { title: "Princess Cut", image: "https://heeradiamonds.com/cdn/shop/files/princess_cut_loose_diamond_540x.jpg?v=1742151551",slug: "Princess" },
+  { title: "Oval Cut",     image: "https://heeradiamonds.com/cdn/shop/files/oval_cut_loose_diamond_540x.jpg?v=1742151296",    slug: "Oval" },
+  { title: "Marquise Cut", image: "https://heeradiamonds.com/cdn/shop/files/Marquise_cut_loose_diamond_540x.jpg?v=1742151652",slug: "Marquise" },
 ];
 
 export const brandSections = [
